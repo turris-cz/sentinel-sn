@@ -1,0 +1,6 @@
+MANIFEST
+dist/**
+*.pyc
+sn/__pycache__/**
+
+

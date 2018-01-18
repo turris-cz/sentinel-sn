@@ -1,0 +1,27 @@
+This package implements ZMQ networks features shared across all Sentinel boxes.
+
+Instalation and test instructions:
+
+1) Create virtual environment for python3:
+
+    virtualenv --python=python3 venv
+
+2) Activate virtual environment
+
+    source venv/bin/activate
+
+3) Install the package
+ All the dependencies are installed automatically.
+
+    pip install sn-<version>.tar.gz
+
+4) Test it
+    tar xzf sn-<version>.tar.gz
+    cd sn-<version>/tests/
+    ./run_example.sh
+
+Package build - produces sn-<version>.tar.gz:
+
+    python setup.py sdist
+
+The package archive will be available in dist directory
