@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 
+import zmq
 import sys
 import time
 from random import randint
 
 import sn
 
-(sock_srv,) = sn.socket_builder(("sock_srv",), sys.argv[1:])
+aparser = sn.get_arg_parser()
+args = sn.parse(aparser)
+print(args)
+
+ctx = zmq.Context.instance()
+sctx = sn.Resources(ctx, args)
+sock_srv = sctx.get_socket("sock_srv")
 
 rand_ID = randint(10,99)
 print("server ID (randomly generated)="+str(rand_ID))
