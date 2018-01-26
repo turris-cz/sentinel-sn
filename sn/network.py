@@ -26,6 +26,9 @@ def parse_msg(data):
 
 
 def encode_msg(msg_type, data):
+    """ Gets string message type and its's string data. Then, both of them are
+    packed to be prepared for zmg.send_multipart().
+    """
     b = bytes(msg_type, encoding="UTF-8")
     msg = msgpack.packb(data)
 
@@ -33,14 +36,15 @@ def encode_msg(msg_type, data):
 
 
 def get_arg_parser():
+    """ Creates own arguments parser and return it as an object.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('--resource', nargs=1, action='append')
     return parser
 
 
 def parse(aparser):
-    args = aparser.parse_args()
-    return args.resource
+    return aparser.parse_args()
 
 
 def resource_parser(config_list):
@@ -50,9 +54,9 @@ def resource_parser(config_list):
     {name:[connection1, connection2,...]} as each ZMQ socket can handle
     multiple connections. Each connection is a namedtuple.
     """
-    Connection_t = namedtuple(
-            'Connection_t',
-            'direction sock_type address port'
+    Connection = namedtuple(
+            'Connection',
+            ['direction', 'sock_type', 'address', 'port']
     )
     resources = dict()
     for config in config_list:
@@ -61,9 +65,9 @@ def resource_parser(config_list):
         if len(splitted) == 5:
             if not splitted[0] in resources:
                 resources[splitted[0]] = list()
-            resources[splitted[0]].append(Connection_t(*splitted[1:]))
+            resources[splitted[0]].append(Connection(*splitted[1:]))
         else:
-            raise SockConfigError("Invalid resource: " + config)
+            raise SockConfigError("Resource {arg} is invalid.".format(arg=config))
     return resources
 
 
@@ -76,18 +80,19 @@ class Resources:
     an API-like interface for requesting ZMQ sockets based on available
     resources.
     """
-    def __init__(self, ctx, resources):
-        self.context = ctx
+    def __init__(self, ctx, args=None):
         """ Gets a list of command line arguments - each for one socket
         connection and creates a dict of ZMQ socket configs.
         """
+        if not args:
+            args = get_arg_parser().parse_args()
+        self.context = ctx
         self.sock_configs = dict()
-        res_avail = resource_parser(resources)
+        res_avail = resource_parser(args.resource)
 
         for res in res_avail:
             sc = None
             for connection in res_avail[res]:
-                print("connection="+str(connection))
                 if sc:
                     sc.add_connection(
                         connection.sock_type,
@@ -105,13 +110,25 @@ class Resources:
                     )
             self.sock_configs[res] = sc
 
-    def get_socket(self, name):
-        if name in self.sock_configs:
-            if not self.sock_configs[name].socket:
-                self.sock_configs[name].connect()
-            return self.sock_configs[name].socket
+    def get_socket(self, *args):
+        ret = list()
+        for arg in args:
+            if type(arg) == tuple:
+                name = arg[0]
+            else:
+                name = arg
+            if name in self.sock_configs:
+                if type(arg) == tuple and not self.sock_configs[name].isType(arg[1]):
+                    raise SockConfigError("Socket type does not match required value!")
+                if not self.sock_configs[name].socket:
+                    self.sock_configs[name].connect()
+                ret.append(self.sock_configs[name].socket)
+            else:
+                raise SockConfigError("Resource {arg} not provided.".format(arg=name))
+        if len(ret) == 1:
+            return ret[0]
         else:
-            raise SockConfigError("Resource not provided: " + name)
+            return ret
 
 
 class SockConfig:
@@ -143,11 +160,10 @@ class SockConfig:
     ]
 
     def __init__(self, context, socktype, direction, addr, port):
-        """ Initilizes ZMQ Context, Socket and its first connection. List
+        """ Adds socket configuruation. List
         of all connection is stored for further checking of duplicate
         connections.
         """
-        print("addr="+str(addr)+", port="+str(port))
         self.check_params_validity(socktype, direction, addr, port)
 
         zmq_connection = self.ZMQConnection(addr, port)
@@ -198,6 +214,8 @@ class SockConfig:
 
         if int(port) < 1 or int(port) > 65535:
             raise SockConfigError("Port number out of range", port)
+    def isType(self, socktype):
+        return (socktype in SockConfig.SOCKET_TYPE_MAP and self.socktype == SockConfig.SOCKET_TYPE_MAP[socktype])
 
     def connect(self):
         if not self.socket:
@@ -209,5 +227,7 @@ class SockConfig:
                     self.socket.bind(zmq_connection.connection)
                 elif self.direction == "connect":
                     self.socket.connect(zmq_connection.connection)
+                else:
+                    raise SockConfigError("Wrong socket direction")
         else:
             raise SockConfigError("Socket already connected")

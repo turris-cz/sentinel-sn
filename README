@@ -12,15 +12,20 @@ Instalation and test instructions:
 
 3) Install the package
  All the dependencies are installed automatically.
-
-    pip install sn-<version>.tar.gz
-
+    Using tarball:
+        pip install sn-<version>.tar.gz
+    (or)Cloned from git:
+        pip install sn/ (where 'sn' is cloned folder containing 'setup.py')
 4) Test it
-    tar xzf sn-<version>.tar.gz
-    cd sn-<version>/tests/
-    ./run_example.sh
+    Using tarball:
+        tar xzf sn-<version>.tar.gz
+        cd sn-<version>/tests/
+        ./run_example.sh
+    (or)Cloned from git:
+        cd sn/tests
+        ./run_example.sh
 
-Package build - produces sn-<version>.tar.gz:
+Package build (tarball creation)- produces sn-<version>.tar.gz:
 
     python setup.py sdist
 
