@@ -127,7 +127,7 @@ class Resources:
             if sock_name in self.sock_configs:
                 if (
                     type(socket) == tuple
-                    and not self.sock_configs[sock_name].isType(socket[1])
+                    and not self.sock_configs[sock_name].is_type(socket[1])
                 ):
                     raise SockConfigError("Socket type does not match\
                         required value!")
@@ -227,7 +227,7 @@ class SockConfig:
         if int(port) < 1 or int(port) > 65535:
             raise SockConfigError("Port number out of range", port)
 
-    def isType(self, socktype):
+    def is_type(self, socktype):
         """ Checks whether the socket type of this socket is equal to
         'socktype' string argument.
         """
