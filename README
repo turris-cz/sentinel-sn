@@ -22,7 +22,7 @@ Instalation and test instructions:
         cd sn-<version>/tests/
         ./run_example.sh
     (or)Cloned from git:
-        cd sn/tests
+        cd sn/examples
         ./run_example.sh
 
 Package build (tarball creation)- produces sn-<version>.tar.gz:
