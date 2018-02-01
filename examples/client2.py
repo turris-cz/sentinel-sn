@@ -12,7 +12,7 @@ aparser = sn.get_arg_parser()
 args = sn.parse(aparser)
 
 ctx = zmq.Context.instance()
-sctx = sn.Resources(ctx, args)
+sctx = sn.SN(ctx, args)
 sock_cli, sock_cli2 = sctx.get_socket("sock_cli", ("sock_cli2", "REQ"))
 
 rand_ID = randint(10,99)

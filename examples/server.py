@@ -9,7 +9,7 @@ import sn
 
 ctx = zmq.Context.instance()
 # Resources are passed using internal argument parser:
-sctx = sn.Resources(ctx)
+sctx = sn.SN(ctx)
 sock_srv = sctx.get_socket("sock_srv")
 
 # Some work:

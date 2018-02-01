@@ -9,7 +9,7 @@ from random import randint
 
 
 ctx = zmq.Context.instance()
-sctx = sn.Resources(ctx)
+sctx = sn.SN(ctx)
 # Resources are passed using internal argument parser:
 # Socket "sock_cli" is enforced to be "REQ" type:
 sock_cli = sctx.get_socket(("sock_cli","REQ"))

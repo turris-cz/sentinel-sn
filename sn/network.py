@@ -6,8 +6,10 @@ import zmq
 
 from collections import namedtuple
 
+class SentinelError(Exception):
+    pass
 
-class InvalidMsgError(Exception):
+class InvalidMsgError(SentinelError):
     pass
 
 
@@ -39,7 +41,8 @@ def get_arg_parser():
     """ Creates own arguments parser and return it as an object.
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--resource', nargs=1, action='append')
+    parser.add_argument('--resource', nargs=1, action='append', required=True,
+        help='resource format: sockname,[conn/bind],sock_type,ip_address,port')
     parser.add_argument('--disable-ipv6', action='store_true')
     return parser
 
@@ -68,8 +71,8 @@ def resource_parser(config_list):
                 resources[splitted[0]] = list()
             resources[splitted[0]].append(Connection(*splitted[1:]))
         else:
-            raise SockConfigError("Resource {arg} is\
-                    invalid.".format(arg=config))
+            raise SockConfigError("Resource {} is"\
+                    "invalid.".format(config))
     return resources
 
 
@@ -77,7 +80,7 @@ class SockConfigError(Exception):
     pass
 
 
-class Resources:
+class SN:
     """ This class serves as a container for all resources. This class provides
     an API-like interface for requesting ZMQ sockets based on available
     resources.
@@ -129,14 +132,14 @@ class Resources:
                     type(socket) == tuple
                     and not self.sock_configs[sock_name].is_type(socket[1])
                 ):
-                    raise SockConfigError("Socket type does not match\
-                        required value!")
+                    raise SockConfigError("Socket type does not match"\
+                        "required value!")
                 if not self.sock_configs[sock_name].socket:
                     self.sock_configs[sock_name].connect()
                 ret.append(self.sock_configs[sock_name].socket)
             else:
-                raise SockConfigError("Resource {arg} not\
-                    provided.".format(arg=sock_name))
+                raise SockConfigError("Resource {} not"\
+                    "provided.".format(sock_name))
         if len(ret) == 1:
             return ret[0]
         else:
