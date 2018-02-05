@@ -6,6 +6,35 @@ import msgpack
 def good_type():
     return "sentinel/tests/good_string"
 
+@pytest.fixture(params=[
+                        "sentinel/tests/goodstring",
+                        "sentinel/tests/good/string",
+                        "sentinel/tests/good_string",
+                        "sentinel/tests/good_string_123",
+                        "sentinel/tests/box1",
+                        "sentinel/tests/box/1",
+                        "s/t/b",
+                        "a/b/c/s/d/g",
+                        ])
+def good_types(request):
+    return request.param
+
+@pytest.fixture(params=[
+                        "/sentinel/tests/broken",
+                        "sentinel/tests/broken/",
+                        "/sentinel/tests/broken/",
+                        "sentinel/tests/bro ken",
+                        "sentinel/tests/bro-ken",
+                        "sentinel/tests/Broken",
+                        "sentinel/tests/břoken",
+                        "sentinel/tests/bro?ken",
+                        "sentinel/tests/bro@ken",
+                        "sentinel//broken",
+                        "s//b",
+                        ])
+def bad_types(request):
+    return request.param
+
 @pytest.fixture
 def good_dict():
     return {
@@ -44,33 +73,12 @@ def broken_msg(request, good_msg):
 
     return (good_msg[0], msg)
 
-@pytest.fixture(params=[
-                        "sentinel/tests/goodstring",
-                        "sentinel/tests/good/string",
-                        "sentinel/tests/good_string",
-                        "sentinel/tests/good_string_123",
-                        "sentinel/tests/box1",
-                        "sentinel/tests/box/1",
-                        "s/t/b",
-                        "a/b/c/s/d/g",
-                        ])
-def good_type_msg(request, good_msg):
-    t = bytes(request.param, encoding="UTF-8")
+@pytest.fixture
+def good_type_msg(good_types, good_msg):
+    t = bytes(good_types, encoding="UTF-8")
     return (t, good_msg[1])
 
-@pytest.fixture(params=[
-                        "/sentinel/tests/broken",
-                        "sentinel/tests/broken/",
-                        "/sentinel/tests/broken/",
-                        "sentinel/tests/bro ken",
-                        "sentinel/tests/bro-ken",
-                        "sentinel/tests/Broken",
-                        "sentinel/tests/břoken",
-                        "sentinel/tests/bro?ken",
-                        "sentinel/tests/bro@ken",
-                        "sentinel//broken",
-                        "s//b",
-                        ])
-def broken_type_msg(request, good_msg):
-    t = bytes(request.param, encoding="UTF-8")
+@pytest.fixture
+def broken_type_msg(bad_types, good_msg):
+    t = bytes(bad_types, encoding="UTF-8")
     return (t, good_msg[1])
