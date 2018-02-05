@@ -71,8 +71,7 @@ def resource_parser(config_list):
                 resources[splitted[0]] = list()
             resources[splitted[0]].append(Connection(*splitted[1:]))
         else:
-            raise SockConfigError("Resource {} is"\
-                    "invalid.".format(config))
+            raise SockConfigError("Resource {} is invalid.".format(config))
     return resources
 
 
@@ -132,14 +131,12 @@ class SN:
                     type(socket) == tuple
                     and not self.sock_configs[sock_name].is_type(socket[1])
                 ):
-                    raise SockConfigError("Socket type does not match"\
-                        "required value!")
+                    raise SockConfigError("Socket type does not match required value!")
                 if not self.sock_configs[sock_name].socket:
                     self.sock_configs[sock_name].connect()
                 ret.append(self.sock_configs[sock_name].socket)
             else:
-                raise SockConfigError("Resource {} not"\
-                    "provided.".format(sock_name))
+                raise SockConfigError("Resource {} not provided.".format(sock_name))
         if len(ret) == 1:
             return ret[0]
         else:
