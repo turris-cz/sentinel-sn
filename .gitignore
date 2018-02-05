@@ -1,6 +1,10 @@
+## Files for packaging
 MANIFEST
-dist/**
+dist
+
+## Cache files and folders
 *.pyc
-sn/__pycache__/**
+__pycache__
 
-
+## Tests
+.pytest_cache
