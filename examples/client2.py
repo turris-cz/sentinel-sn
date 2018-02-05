@@ -9,10 +9,10 @@ from random import randint
 
 # Custom argument parser is created here
 aparser = sn.get_arg_parser()
-args = sn.parse(aparser)
 
 ctx = zmq.Context.instance()
 sctx = sn.SN(ctx, args)
+args = sctx.args
 sock_cli, sock_cli2 = sctx.get_socket("sock_cli", ("sock_cli2", "REQ"))
 
 rand_ID = randint(10,99)
