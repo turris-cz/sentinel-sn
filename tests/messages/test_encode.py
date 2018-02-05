@@ -19,8 +19,9 @@ def test_bad_payload(good_type):
         encoded = sn.encode_msg(good_type, ("I", "am", "a", "tuple"))
 
 def test_good_type(good_types, good_payload):
-    # I mean: "Not raise any exception"
     (t, p) = sn.encode_msg(good_types, good_payload)
+    assert t
+    assert p
 
 def test_invalid_type(bad_types, good_payload):
     with pytest.raises(sn.InvalidMsgError):

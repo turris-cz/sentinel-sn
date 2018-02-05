@@ -25,8 +25,9 @@ def test_broken_payload(broken_msg):
         (t, p) = sn.parse_msg(broken_msg)
 
 def test_good_type(good_type_msg):
-    # I mean: "Not raise any exception"
     (t, p) = sn.parse_msg(good_type_msg)
+    assert t
+    assert p
 
 def test_invalid_type(broken_type_msg):
     with pytest.raises(sn.InvalidMsgTypeError):
