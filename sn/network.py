@@ -2,7 +2,7 @@ import zmq
 
 from collections import namedtuple
 
-from .argparser import get_arg_parser, parse
+from .argparser import get_arg_parser
 from .exceptions import *
 
 def resource_parser(config_list):
