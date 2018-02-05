@@ -12,7 +12,7 @@ class InvalidMsgError(SentinelError):
     pass
 
 
-class SockConfigError(Exception):
+class SockConfigError(SentinelError):
     pass
 
 
