@@ -1,5 +1,6 @@
 import msgpack
 
+from .exceptions import *
 
 def parse_msg(data):
     """ Gets a Sentinel-type ZMQ message and parses message type and its

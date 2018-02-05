@@ -3,18 +3,7 @@ import zmq
 from collections import namedtuple
 
 from .argparser import get_arg_parser, parse
-
-class SentinelError(Exception):
-    pass
-
-
-class InvalidMsgError(SentinelError):
-    pass
-
-
-class SockConfigError(SentinelError):
-    pass
-
+from .exceptions import *
 
 def resource_parser(config_list):
     """ Gets a tuple of command line arguments - each for one socket connection
