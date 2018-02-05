@@ -13,6 +13,10 @@ def parse_msg(data):
     except IndexError:
         raise InvalidMsgError("Not enough parts in message")
 
+    except (TypeError, msgpack.exceptions.UnpackException, UnicodeDecodeError):
+        raise InvalidMsgError("Broken message")
+
+
     return msg_type, payload
 
 
