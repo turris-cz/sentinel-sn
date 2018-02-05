@@ -2,15 +2,15 @@ import pytest
 
 import sn
 
-def test_parse(good_type, good_dict, good_msg):
+def test_parse(good_type, good_payload, good_msg):
     (t, p) = sn.parse_msg(good_msg)
     assert t == good_type
-    assert p == good_dict
+    assert p == good_payload
 
-def test_longer(good_type, good_dict, good_long):
+def test_longer(good_type, good_payload, good_long):
     (t, p) = sn.parse_msg(good_long)
     assert t == good_type
-    assert p == good_dict
+    assert p == good_payload
 
 def test_missing_type(good_msg):
     with pytest.raises(sn.InvalidMsgError):

@@ -36,7 +36,7 @@ def bad_types(request):
     return request.param
 
 @pytest.fixture
-def good_dict():
+def good_payload():
     return {
         "key1": "val1",
         "key2": 2,
@@ -45,17 +45,17 @@ def good_dict():
     }
 
 @pytest.fixture
-def good_msg(good_type, good_dict):
+def good_msg(good_type, good_payload):
     t = bytes(good_type, encoding="UTF-8")
-    p = msgpack.packb(good_dict, encoding="UTF-8")
+    p = msgpack.packb(good_payload, encoding="UTF-8")
 
     return (t, p)
 
 @pytest.fixture
-def good_long(good_type, good_dict):
+def good_long(good_type, good_payload):
     t = bytes(good_type, encoding="UTF-8")
-    p = msgpack.packb(good_dict, encoding="UTF-8")
-    x = msgpack.packb(good_dict, encoding="UTF-8")
+    p = msgpack.packb(good_payload, encoding="UTF-8")
+    x = msgpack.packb(good_payload, encoding="UTF-8")
 
     return (t, p, x)
 
