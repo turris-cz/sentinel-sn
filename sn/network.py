@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-import argparse
 
-import msgpack
 import zmq
 
 from collections import namedtuple
+
+from .argparser import get_arg_parser, parse
 
 class SentinelError(Exception):
     pass
@@ -13,42 +13,6 @@ class InvalidMsgError(SentinelError):
     pass
 
 
-def parse_msg(data):
-    """ Gets a Sentinel-type ZMQ message and parses message type and its
-    payload.
-    """
-    try:
-        msg_type = str(data[0], encoding="UTF-8")
-        payload = msgpack.unpackb(data[1], encoding="UTF-8")
-
-    except IndexError:
-        raise InvalidMsgError("Not enough parts in message")
-
-    return msg_type, payload
-
-
-def encode_msg(msg_type, data):
-    """ Gets string message type and its's string data. Then, both of them are
-    packed to be prepared for zmg.send_multipart().
-    """
-    b = bytes(msg_type, encoding="UTF-8")
-    msg = msgpack.packb(data)
-
-    return (b, msg)
-
-
-def get_arg_parser():
-    """ Creates own arguments parser and return it as an object.
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--resource', nargs=1, action='append', required=True,
-        help='resource format: sockname,[conn/bind],sock_type,ip_address,port')
-    parser.add_argument('--disable-ipv6', action='store_true')
-    return parser
-
-
-def parse(aparser):
-    return aparser.parse_args()
 
 
 def resource_parser(config_list):
