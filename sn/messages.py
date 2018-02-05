@@ -31,6 +31,13 @@ def encode_msg(msg_type, data):
     """ Gets string message type and its's string data. Then, both of them are
     packed to be prepared for zmg.send_multipart().
     """
+
+    if not SN_MSG.match(msg_type or ""):
+        raise InvalidMsgTypeError("Bad message type definition")
+
+    if not data or type(data) != dict:
+        raise InvalidMsgError("Empty payload parameter")
+
     b = bytes(msg_type, encoding="UTF-8")
     msg = msgpack.packb(data)
 
