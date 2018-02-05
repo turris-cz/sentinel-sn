@@ -1,6 +1,11 @@
+import re
+
 import msgpack
 
 from .exceptions import *
+
+SN_MSG_REGEXP = "^([a-z0-9_]|[a-z0-9_]+/)([a-z0-9_]+/)+[a-z0-9_]+$"
+SN_MSG = re.compile(SN_MSG_REGEXP)
 
 def parse_msg(data):
     """ Gets a Sentinel-type ZMQ message and parses message type and its
@@ -8,6 +13,8 @@ def parse_msg(data):
     """
     try:
         msg_type = str(data[0], encoding="UTF-8")
+        if not SN_MSG.match(msg_type):
+            raise InvalidMsgTypeError("Bad message type definition")
         payload = msgpack.unpackb(data[1], encoding="UTF-8")
 
     except IndexError:
