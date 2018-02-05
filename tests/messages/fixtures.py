@@ -31,6 +31,7 @@ def good_types(request):
                         "sentinel/tests/bro@ken",
                         "sentinel//broken",
                         "s//b",
+                        ""
                         ])
 def bad_types(request):
     return request.param
