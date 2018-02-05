@@ -43,7 +43,7 @@ class SN:
         if argparser:
             self.args = argparser.parse_args()
         else:
-            self.args = get_arg_parser.parse_args()
+            self.args = get_arg_parser().parse_args()
 
         res_avail = resource_parser(self.args.resource)
 
