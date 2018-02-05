@@ -9,10 +9,13 @@ from .argparser import get_arg_parser, parse
 class SentinelError(Exception):
     pass
 
+
 class InvalidMsgError(SentinelError):
     pass
 
 
+class SockConfigError(Exception):
+    pass
 
 
 def resource_parser(config_list):
@@ -37,10 +40,6 @@ def resource_parser(config_list):
         else:
             raise SockConfigError("Resource {} is invalid.".format(config))
     return resources
-
-
-class SockConfigError(Exception):
-    pass
 
 
 class SN:
