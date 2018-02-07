@@ -34,16 +34,16 @@ class SN:
     an API-like interface for requesting ZMQ sockets based on available
     resources.
     """
-    def __init__(self, ctx, argparser=None):
+    def __init__(self, ctx, argparser=None, **options):
         """ Gets a list of command line arguments - each for one socket
         connection and creates a dict of ZMQ socket configs.
         """
         self.context = ctx
         self.sock_configs = dict()
         if argparser:
-            self.args = argparser.parse_args()
+            self.args = argparser.parse_args(options["args"] if "args" in options else None)
         else:
-            self.args = get_arg_parser().parse_args()
+            self.args = get_arg_parser().parse_args(options["args"] if "args" in options else None)
 
         res_avail = resource_parser(self.args.resource)
 
