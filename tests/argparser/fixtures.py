@@ -54,3 +54,7 @@ def bind_args(request):
                         ])
 def multisock_args(request):
     return request.param.split(" ")
+
+@pytest.fixture
+def required_args():
+    return "--resource res,connect,PUSH,127.0.0.1,8800".split(" ")
