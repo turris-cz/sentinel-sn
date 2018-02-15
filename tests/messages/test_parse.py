@@ -18,7 +18,8 @@ def test_missing_type(good_msg):
 
 def test_missing_payload(good_msg):
     with pytest.raises(sn.InvalidMsgError):
-        (t, p) = sn.parse_msg(good_msg[0])
+        data = (good_msg[0],)
+        (t, p) = sn.parse_msg(data)
 
 def test_broken_payload(broken_msg):
     with pytest.raises(sn.InvalidMsgError):
