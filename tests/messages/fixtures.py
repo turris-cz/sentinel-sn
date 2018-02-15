@@ -7,6 +7,8 @@ def good_type():
     return "sentinel/tests/good_string"
 
 @pytest.fixture(params=[
+                        "sentinel",
+                        "sentinel/tests",
                         "sentinel/tests/goodstring",
                         "sentinel/tests/good/string",
                         "sentinel/tests/good_string",
@@ -30,7 +32,10 @@ def good_types(request):
                         "sentinel/tests/bro?ken",
                         "sentinel/tests/bro@ken",
                         "sentinel//broken",
+                        "sentinel//broken",
                         "s//b",
+                        "sentinel/",
+                        "/sentinel",
                         ""
                         ])
 def bad_types(request):

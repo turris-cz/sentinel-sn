@@ -4,7 +4,7 @@ import msgpack
 
 from .exceptions import *
 
-SN_MSG_REGEXP = "^([a-z0-9_]|[a-z0-9_]+/)([a-z0-9_]+/)+[a-z0-9_]+$"
+SN_MSG_REGEXP = "^([a-z0-9_]+/)*[a-z0-9_]+$"
 SN_MSG = re.compile(SN_MSG_REGEXP)
 
 def parse_msg(data):
