@@ -19,6 +19,7 @@ def empty_args():
                         "--resource res,connect,FOO,sentinel.cz,7700",
                         "--resource res,connect,PUSH,sentinel.cz,0",
                         "--resource res,connect,PUSH,*,8800",
+                        "--resource res,conn,PUSH,127.0.0.1,8800",
                         "--resource res,connect,PUSH,localhost,8800"
                             " --resource res,connect,PUSH,localhost,8800",
                         "--resource res,bind,PULL,localhost,8800"

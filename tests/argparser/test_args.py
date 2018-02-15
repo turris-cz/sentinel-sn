@@ -9,6 +9,10 @@ def test_empty_args(arg_parser, empty_args):
     with pytest.raises(SystemExit):
         arg_parser.parse_args(empty_args)
 
+def test_empty_args_native(zmq_context):
+    with pytest.raises(SystemExit):
+        ctx = sn.SN(zmq_context)
+
 def test_bad_args(zmq_context, arg_parser, bad_args):
     with pytest.raises((SystemExit, sn.SockConfigError, zmq.error.ZMQError)):
         ctx = sn.SN(zmq_context, arg_parser, args=bad_args)
