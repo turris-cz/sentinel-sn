@@ -1,3 +1,34 @@
+"""
+This module provides standardized logging for whole sentinel network.
+
+There are 2 preconfigured handlers:
+  - syslog - INFO and higher severity
+  - file under rotation - DEBUG and higher severity
+
+Expected usage in your script:
+
+```
+import logging
+import sn
+logger = logging.getLogger("component_name")
+logger.info("I'm running!")
+```
+
+Your logger will inherit INFO level from root logger. This is kind a fail-safe
+mechanism.  If you need to use DEBUG level, you must enable it explicitly:
+
+```
+import logging
+import sn
+logger = logging.getLogger("component_name")
+logger.setLevel(logging.DEBUG)
+logger.debug("Still running...")
+```
+
+Please, do not change logging format for syslog handler. It will be parsed by
+TM. File handler is prefixed by current time, for better debugging.
+
+"""
 import logging
 import logging.handlers
 
