@@ -15,6 +15,6 @@ file_handler.setFormatter(time_formatter)
 file_handler.setLevel(logging.DEBUG)
 
 root_logger = logging.getLogger()
-root_logger.setLevel(logging.DEBUG)
+root_logger.setLevel(logging.INFO)
 root_logger.addHandler(syslog_handler)
 root_logger.addHandler(file_handler)
