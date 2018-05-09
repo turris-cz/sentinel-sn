@@ -108,7 +108,7 @@ class Socket:
         self.setup_done = False
 
 
-    def add_resource(self, resource):
+    def check_resource(self, resource):
         if self.name != resource.name:
             raise SockConfigError("Putting bad resource to socket")
 
@@ -126,6 +126,10 @@ class Socket:
 
         if resource in self.resources:
             raise SockConfigError("Resource duplication")
+
+
+    def add_resource(self, resource):
+        self.check_resource(resource)
 
         self.resources.append(resource)
 
