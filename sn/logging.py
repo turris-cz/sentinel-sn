@@ -29,6 +29,7 @@ Please, do not change logging format for syslog handler. It will be parsed by
 TM. File handler is prefixed by current time, for better debugging.
 
 """
+import sys
 import logging
 import logging.handlers
 
@@ -49,3 +50,14 @@ root_logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
 root_logger.addHandler(syslog_handler)
 root_logger.addHandler(file_handler)
+
+
+def log_uncaught(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+
+    root_logger.exception("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+    sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
+sys.excepthook = log_uncaught
