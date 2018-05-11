@@ -171,10 +171,15 @@ class SN:
         ## Gather data
         self.context = ctx
 
+        ## This is small hack to make the whole module ready for black-box tests
+        args_to_parse = None
+        if "args" in options:
+            args_to_parse = options["args"]
+
         if argparser:
-            self.args = argparser.parse_args(options["args"] if "args" in options else None)
+            self.args = argparser.parse_args(args_to_parse)
         else:
-            self.args = get_arg_parser().parse_args(options["args"] if "args" in options else None)
+            self.args = get_arg_parser().parse_args(args_to_parse)
 
         ## Build all necessary configuration
         self.build_global_configuration()
