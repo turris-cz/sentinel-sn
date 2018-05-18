@@ -223,6 +223,9 @@ class SN:
             else:
                 sock_name, sock_type = request, None
 
+            if sock_name not in self.sockets:
+                raise SockConfigError("Requesting undefined socket")
+
             socket = self.sockets[sock_name]
             ret.append(socket.build(self.context, sock_name, sock_type))
 
