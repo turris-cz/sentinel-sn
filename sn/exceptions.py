@@ -12,3 +12,11 @@ class InvalidMsgTypeError(InvalidMsgError):
 
 class SockConfigError(SentinelError):
     pass
+
+
+class UndefinedSocketError(SentinelError):
+    pass
+
+
+class LoopError(SentinelError):
+    pass
