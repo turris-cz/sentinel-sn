@@ -84,9 +84,12 @@ def _sn_main_loop(box_name, user_data, socket_recv, socket_send, setup=None, pro
 
 
 def process_result(socket_send, result):
-    if not result or not socket_send:
+    if not result:
         # The box is output-only or it hasn't any reasonable answer
         return
+
+    if not socket_send:
+        raise sn.LoopError("Box generated output but there is any output socket. Bad configuration?")
 
     try:
         msg_type, payload = result
