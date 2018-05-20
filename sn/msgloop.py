@@ -58,6 +58,10 @@ def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None, a
     except LoopError as e:
         raise e
 
+    except AssertionError as e:
+        # For pytest
+        raise e
+
     except Exception as e:
         logger.error("Uncaught exception from loop")
         logger.exception(e)
