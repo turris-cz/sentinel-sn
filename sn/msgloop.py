@@ -1,5 +1,6 @@
 import logging
 import inspect
+import signal
 
 from collections import namedtuple
 
@@ -16,6 +17,14 @@ EnvData = namedtuple("EnvData", [
                                 ])
 
 
+class SignalReceived(Exception):
+    pass
+
+
+def signal_handler(signum, frame):
+    raise SignalReceived()
+
+
 def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
     ctx = sn.SN(zmq.Context.instance(), argparser or sn.get_arg_parser())
     socket_recv, socket_send = detect_and_get_sockets(ctx)
@@ -29,9 +38,15 @@ def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
 
     logger.info("SN main starting loop for %s box", box_name)
 
+    for sig in [ signal.SIGHUP, signal.SIGTERM, signal.SIGQUIT, signal.SIGABRT ]:
+        signal.signal(sig, signal_handler)
+
     try:
         user_data = setup() if setup else None
         _sn_main_loop(box_name, user_data, socket_recv, socket_send, setup, process, teardown)
+
+    except SignalReceived as e:
+        logger.info("Box %s stopped by signal", box_name)
 
     except sn.LoopError as e:
         raise e
@@ -43,6 +58,7 @@ def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
     finally:
         if teardown:
             teardown(user_data)
+        ctx.context.destroy()
 
 
 def _sn_main_loop(box_name, user_data, socket_recv, socket_send, setup=None, process=None, teardown=None):
