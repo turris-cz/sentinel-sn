@@ -6,7 +6,10 @@ from collections import namedtuple
 
 import zmq
 
-import sn
+from .network import SN
+from .network import get_arg_parser
+from .messages import encode_msg, parse_msg
+from .exceptions import *
 
 
 logger = logging.getLogger("sn_main")
@@ -26,17 +29,17 @@ def signal_handler(signum, frame):
 
 
 def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
-    ctx = sn.SN(zmq.Context.instance(), argparser or sn.get_arg_parser())
+    ctx = SN(zmq.Context.instance(), argparser or get_arg_parser())
     socket_recv, socket_send = detect_and_get_sockets(ctx)
 
     if not socket_recv and not socket_send:
-        raise sn.LoopError("Neither input nor output socket provided")
+        raise LoopError("Neither input nor output socket provided")
     if teardown and not setup:
-        raise sn.LoopError("There is teardown callback without setup")
+        raise LoopError("There is teardown callback without setup")
     if not process:
-        raise sn.LoopError("Missing 'process' callback")
+        raise LoopError("Missing 'process' callback")
     if not socket_recv and not inspect.isgeneratorfunction(process):
-        raise sn.LoopError("Generator is expected for output-only box")
+        raise LoopError("Generator is expected for output-only box")
 
     logger.info("SN main starting loop for %s box", box_name)
 
@@ -52,7 +55,7 @@ def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
     except SignalReceived as e:
         logger.info("Box %s stopped by signal", box_name)
 
-    except sn.LoopError as e:
+    except LoopError as e:
         raise e
 
     except Exception as e:
@@ -77,7 +80,7 @@ def _sn_main_loop(env_data, user_data, socket_recv, socket_send, setup=None, pro
         try:
             if socket_recv:
                 msg_in = socket_recv.recv_multipart()
-                msg_type, payload = sn.parse_msg(msg_in)
+                msg_type, payload = parse_msg(msg_in)
 
                 result = process(env_data, user_data, msg_type, payload)
                 process_result(socket_send, result)
@@ -85,7 +88,7 @@ def _sn_main_loop(env_data, user_data, socket_recv, socket_send, setup=None, pro
                 for result in process(env_data, user_data):
                     process_result(socket_send, result)
 
-        except sn.InvalidMsgError as e:
+        except InvalidMsgError as e:
             logger.error("Received broken message")
 
 
@@ -95,19 +98,19 @@ def process_result(socket_send, result):
         return
 
     if not socket_send:
-        raise sn.LoopError("Box generated output but there is any output socket. Bad configuration?")
+        raise LoopError("Box generated output but there is any output socket. Bad configuration?")
 
     try:
         msg_type, payload = result
-        msg_out = sn.encode_msg(msg_type, payload)
+        msg_out = encode_msg(msg_type, payload)
         socket_send.send_multipart(msg_out)
 
-    except (ValueError, sn.InvalidMsgError) as e:
+    except (ValueError, InvalidMsgError) as e:
         # Invalid message on input means that a received some bad message and I
         # just want to not fail. Invalid message on output means a
         # programmer error of the box author and I need to distinguish between
         # them.
-        raise sn.LoopError("Box generates broken messages")
+        raise LoopError("Box generates broken messages")
 
 
 def detect_and_get_sockets(context):
@@ -116,12 +119,12 @@ def detect_and_get_sockets(context):
 
     try:
         socket_recv = context.get_socket("in")
-    except sn.UndefinedSocketError as e:
+    except UndefinedSocketError as e:
         pass
 
     try:
         socket_send = context.get_socket("out")
-    except sn.UndefinedSocketError as e:
+    except UndefinedSocketError as e:
         pass
 
     return socket_recv, socket_send
