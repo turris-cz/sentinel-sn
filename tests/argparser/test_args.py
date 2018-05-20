@@ -15,7 +15,7 @@ def test_empty_args_native(zmq_context):
         ctx = sn.SN(zmq_context)
 
 def test_undefined_resource(zmq_context):
-    with pytest.raises(sn.SockConfigError):
+    with pytest.raises(sn.UndefinedSocketError):
         ctx = sn.SN(zmq_context, args="--resource out,connect,PUSH,sentinel.cz,7700".split(" "))
         assert ctx.get_socket("in")
 
