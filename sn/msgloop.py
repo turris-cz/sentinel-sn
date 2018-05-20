@@ -80,20 +80,21 @@ def init_env_data(box_name):
 
 
 def _sn_main_loop(env_data, user_data, socket_recv, socket_send, setup=None, process=None, teardown=None):
-    while True:
+    if socket_recv:
         try:
-            if socket_recv:
+            while True:
                 msg_in = socket_recv.recv_multipart()
                 msg_type, payload = parse_msg(msg_in)
 
                 result = process(env_data, user_data, msg_type, payload)
                 process_result(socket_send, result)
-            else:
-                for result in process(env_data, user_data):
-                    process_result(socket_send, result)
 
         except InvalidMsgError as e:
             logger.error("Received broken message")
+
+    else:
+        for result in process(env_data, user_data):
+            process_result(socket_send, result)
 
 
 def process_result(socket_send, result):
