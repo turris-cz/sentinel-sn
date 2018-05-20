@@ -28,8 +28,8 @@ def signal_handler(signum, frame):
     raise SignalReceived()
 
 
-def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
-    ctx = SN(zmq.Context.instance(), argparser or get_arg_parser())
+def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None, args=None):
+    ctx = SN(zmq.Context.instance(), argparser or get_arg_parser(), args=args)
     socket_recv, socket_send = detect_and_get_sockets(ctx)
 
     if not socket_recv and not socket_send:
