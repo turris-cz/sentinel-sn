@@ -29,6 +29,8 @@ def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
     ctx = sn.SN(zmq.Context.instance(), argparser or sn.get_arg_parser())
     socket_recv, socket_send = detect_and_get_sockets(ctx)
 
+    if not socket_recv and not socket_send:
+        raise sn.LoopError("Neither input nor output socket provided")
     if teardown and not setup:
         raise sn.LoopError("There is teardown callback without setup")
     if not process:
