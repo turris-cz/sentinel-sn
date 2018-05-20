@@ -40,12 +40,14 @@ def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
 
     logger.info("SN main starting loop for %s box", box_name)
 
+    env_data = init_env_data(box_name)
+
     for sig in [ signal.SIGHUP, signal.SIGTERM, signal.SIGQUIT, signal.SIGABRT ]:
         signal.signal(sig, signal_handler)
 
     try:
         user_data = setup() if setup else None
-        _sn_main_loop(box_name, user_data, socket_recv, socket_send, setup, process, teardown)
+        _sn_main_loop(env_data, user_data, socket_recv, socket_send, setup, process, teardown)
 
     except SignalReceived as e:
         logger.info("Box %s stopped by signal", box_name)
@@ -63,12 +65,14 @@ def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None):
         ctx.context.destroy()
 
 
-def _sn_main_loop(box_name, user_data, socket_recv, socket_send, setup=None, process=None, teardown=None):
-    env_data = EnvData(
-                       name = box_name,
-                       logger = logging.getLogger(box_name)
-                       )
+def init_env_data(box_name):
+    return EnvData(
+                   name = box_name,
+                   logger = logging.getLogger(box_name)
+                   )
 
+
+def _sn_main_loop(env_data, user_data, socket_recv, socket_send, setup=None, process=None, teardown=None):
     while True:
         try:
             if socket_recv:
