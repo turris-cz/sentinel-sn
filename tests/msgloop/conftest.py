@@ -3,6 +3,13 @@ import pytest
 import msgpack
 
 
+def build_msg(msg_type, payload):
+    t = bytes(msg_type, encoding="UTF-8")
+    p = msgpack.packb(payload, encoding="UTF-8")
+
+    return (t, p)
+
+
 @pytest.fixture
 def in_only_args():
     return "--resource in,bind,PULL,*,8801".split(" ")
@@ -25,7 +32,4 @@ def bad_socket_args():
 
 @pytest.fixture
 def good_msg():
-    t = bytes("sentinel/test", encoding="UTF-8")
-    p = msgpack.packb({ "foo": "bar" }, encoding="UTF-8")
-
-    return (t, p)
+    return build_msg("sentinel/test", { "foo": "bar" })
