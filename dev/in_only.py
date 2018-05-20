@@ -5,18 +5,20 @@ import zmq
 import sn
 
 
-def main():
-    """Plain lib version"""
-    ctx = sn.SN(zmq.Context.instance())
+def setup():
+    class ExampleResources:
+        foo = "bar"
 
-    socket = ctx.get_socket("in")
+    return ExampleResources
 
-    while True:
-        msg = socket.recv_multipart()
-        mtype, data = sn.parse_msg(msg)
 
-        print(mtype, data)
+def teardown(userdata):
+    print("teardown")
+
+
+def process(envdata, userdata, msg_type, payload):
+    print(msg_type, payload)
 
 
 if __name__ == "__main__":
-    main()
+    sn.sn_main("in_only", setup=setup, teardown=teardown, process=process)

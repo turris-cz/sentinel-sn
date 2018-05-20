@@ -7,23 +7,29 @@ import zmq
 import sn
 
 
-def main():
-    """Plain lib version"""
-    ctx = sn.SN(zmq.Context.instance())
+def setup():
+    class ExampleResources:
+        foo = "bar"
 
-    socket = ctx.get_socket("out")
+    return ExampleResources
 
+
+def teardown(userdata):
+    print("teardown")
+
+
+def process(envdata, userdata):
     while True:
         data = {
-            "foo": "bar",
+            "foo": userdata.foo,
             "ts": int(time.time()),
         }
-        msg = sn.encode_msg("sentinel/dev/sn", data)
-        socket.send_multipart(msg)
-        print("PUB", data)
 
+        yield "sentinel/dev/sn", data
+
+        print("PUB", data)
         time.sleep(1)
 
 
 if __name__ == "__main__":
-    main()
+    sn.sn_main("out_only", setup=setup, teardown=teardown, process=process)
