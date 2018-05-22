@@ -28,7 +28,7 @@ def signal_handler(signum, frame):
     raise SignalReceived()
 
 
-def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None, args=None):
+def sn_main(box_name, process, setup=None, teardown=None, argparser=None, args=None):
     ctx = SN(zmq.Context.instance(), argparser or get_arg_parser(), args=args)
     socket_recv, socket_send = detect_and_get_sockets(ctx)
 
@@ -36,8 +36,6 @@ def sn_main(box_name, setup=None, process=None, teardown=None, argparser=None, a
         raise LoopError("Neither input nor output socket provided")
     if teardown and not setup:
         raise LoopError("There is teardown callback without setup")
-    if not process:
-        raise LoopError("Missing 'process' callback")
     if not socket_recv and not inspect.isgeneratorfunction(process):
         raise LoopError("Generator is expected for output-only box")
 
