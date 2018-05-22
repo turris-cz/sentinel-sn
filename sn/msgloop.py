@@ -34,8 +34,6 @@ def sn_main(box_name, process, setup=None, teardown=None, argparser=None, args=N
 
     if not socket_recv and not socket_send:
         raise LoopError("Neither input nor output socket provided")
-    if teardown and not setup:
-        raise LoopError("There is teardown callback without setup")
     if not socket_recv and not inspect.isgeneratorfunction(process):
         raise LoopError("Generator is expected for output-only box")
 
