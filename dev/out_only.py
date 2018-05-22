@@ -8,20 +8,19 @@ import sn
 
 
 def setup():
-    class ExampleResources:
-        foo = "bar"
+    return {
+            "foo": "bar",
+    }
 
-    return ExampleResources
 
-
-def teardown(userdata):
+def teardown(context):
     print("teardown")
 
 
-def process(envdata, userdata):
+def process(context):
     while True:
         data = {
-            "foo": userdata.foo,
+            "foo": context.foo,
             "ts": int(time.time()),
         }
 
@@ -32,4 +31,4 @@ def process(envdata, userdata):
 
 
 if __name__ == "__main__":
-    sn.sn_main("out_only", setup=setup, teardown=teardown, process=process)
+    sn.sn_main("out_only", process, setup=setup, teardown=teardown)

@@ -6,19 +6,18 @@ import sn
 
 
 def setup():
-    class ExampleResources:
-        foo = "bar"
+    return {
+            "foo": "bar",
+    }
 
-    return ExampleResources
 
-
-def teardown(userdata):
+def teardown(context):
     print("teardown")
 
 
-def process(envdata, userdata, msg_type, payload):
+def process(context, msg_type, payload):
     print(msg_type, payload)
 
 
 if __name__ == "__main__":
-    sn.sn_main("in_only", setup=setup, teardown=teardown, process=process)
+    sn.sn_main("in_only", process, setup=setup, teardown=teardown)
