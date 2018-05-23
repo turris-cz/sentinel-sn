@@ -157,8 +157,7 @@ def process_result(socket_send, result):
         return
 
     if not socket_send:
-        # TODO: Hard fail?
-        raise LoopError("Box generated output but there is any output socket. Bad configuration?")
+        raise SetupError("Box generated output but there is any output socket. Bad configuration?")
 
     msg_type, payload = result
     msg_out = encode_msg(msg_type, payload)
