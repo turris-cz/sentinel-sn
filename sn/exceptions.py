@@ -18,5 +18,5 @@ class UndefinedSocketError(SentinelError):
     pass
 
 
-class LoopError(SentinelError):
+class SetupError(SentinelError):
     pass
