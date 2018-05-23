@@ -40,6 +40,7 @@ def sn_main(box_name, process, setup=None, teardown=None, argparser=None, args=N
 
     except LoopHardFail as e:
         logger.error("Hard Fail of box: %s", context.name)
+        # Finally will be called, because sys.exit() raises exception that will be uncaught.
         sys.exit(1)
 
     except KeyboardInterrupt:
