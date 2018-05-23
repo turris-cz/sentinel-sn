@@ -129,6 +129,9 @@ def _sn_main_loop(context, process):
             context.logger.warning("Box %s raised StopIteration - unexpected behavior", context.name)
             break
 
+        except SetupError as e:
+            raise e
+
         except Exception as e:
             logger.error("Uncaught exception from loop")
             logger.exception(e)
