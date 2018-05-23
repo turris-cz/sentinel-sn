@@ -40,6 +40,7 @@ def sn_main(box_name, process, setup=None, teardown=None, argparser=None, args=N
 
     except LoopHardFail as e:
         logger.error("Hard Fail of box: %s", context.name)
+        logger.exception(e)
         # Finally will be called, because sys.exit() raises exception that will be uncaught.
         sys.exit(1)
 
@@ -128,7 +129,7 @@ def _sn_main_loop(context, process):
             process_result(context.socket_send, result)
             context.errors_in_row = 0
 
-        except StopIteration as e:
+        except StopIteration:
             context.logger.warning("Box %s raised StopIteration - unexpected behavior", context.name)
             break
 
@@ -167,7 +168,7 @@ def process_result(socket_send, result):
         msg_out = encode_msg(msg_type, payload)
         socket_send.send_multipart(msg_out)
 
-    except (ValueError, InvalidMsgError) as e:
+    except (ValueError, InvalidMsgError):
         raise LoopFail("Generated broken output message. Possibly bug in box.")
 
 
