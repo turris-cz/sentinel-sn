@@ -20,6 +20,8 @@ class LoopHardFail(Exception):
     pass
 
 
+class LoopFail(Exception):
+    pass
 
 
 def sn_main(box_name, process, setup=None, teardown=None, argparser=None, args=None):
@@ -159,10 +161,13 @@ def process_result(socket_send, result):
     if not socket_send:
         raise SetupError("Box generated output but there is any output socket. Bad configuration?")
 
-    msg_type, payload = result
-    msg_out = encode_msg(msg_type, payload)
-    socket_send.send_multipart(msg_out)
-    # TODO: Hard fail on InvalidMsgError in box output?
+    try:
+        msg_type, payload = result
+        msg_out = encode_msg(msg_type, payload)
+        socket_send.send_multipart(msg_out)
+
+    except (ValueError, InvalidMsgError) as e:
+        raise LoopFail("Generated broken output message. Possibly bug in box.")
 
 
 def register_signals(context):
