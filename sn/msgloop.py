@@ -130,7 +130,7 @@ def _sn_main_loop(context, process):
             context.errors_in_row = 0
 
         except StopIteration:
-            context.logger.warning("Box %s raised StopIteration - unexpected behavior", context.name)
+            context.logger.info("Box %s raised StopIteration", context.name)
             break
 
         except SetupError as e:
