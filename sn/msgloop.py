@@ -24,8 +24,8 @@ class LoopFail(Exception):
     pass
 
 
-def sn_main(box_name, process, setup=None, teardown=None, argparser=None, args=None):
-    sn_ctx = SN(zmq.Context.instance(), argparser or get_arg_parser(), args=args)
+def sn_main(box_name, process, setup=None, teardown=None, argparser=None):
+    sn_ctx = SN(zmq.Context.instance(), argparser or get_arg_parser())
 
     context = None
     try:
