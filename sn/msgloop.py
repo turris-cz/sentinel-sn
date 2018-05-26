@@ -126,13 +126,13 @@ def teardown_context(context):
 
 def _sn_main_loop(context, process):
     if inspect.isgeneratorfunction(process):
-        generate_output_message = process(context)
+        get_processed_message = processed_message_from_generator(context, process)
     else:
-        generate_output_message = generate_processed_msg(context, process)
+        get_processed_message = processed_message_from_function(context, process)
 
     while context.loop_continue:
         try:
-            result = next(generate_output_message)
+            result = get_processed_message()
             process_result(context.socket_send, result)
             context.errors_in_row = 0
 
@@ -152,14 +152,22 @@ def _sn_main_loop(context, process):
                 raise LoopHardFail("Many errors in row.")
 
 
-def generate_processed_msg(context, process):
-    while True:
+def processed_message_from_generator(context, process):
+    iterator = process(context)
+    def get_from_generator():
+        return next(iterator)
+
+    return get_from_generator
+
+
+def processed_message_from_function(context, process):
+    def get_from_function():
         msg = context.socket_recv.recv_multipart()
         msg_type, payload = parse_msg(msg)
 
-        result = process(context, msg_type, payload)
+        return process(context, msg_type, payload)
 
-        yield result
+    return get_from_function
 
 
 def process_result(socket_send, result):
