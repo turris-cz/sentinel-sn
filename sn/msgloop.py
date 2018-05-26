@@ -31,7 +31,7 @@ def sn_main(box_name, process, setup=None, teardown=None, argparser=None):
     try:
         user_data = get_user_data(setup)
 
-        context = build_context(box_name, sn_ctx,  user_data)
+        context = build_context(box_name, sn_ctx, user_data)
         check_configuration(context, process)
 
         logger.info("SN main starting loop for %s box", box_name)
