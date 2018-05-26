@@ -29,7 +29,7 @@ def sn_main(box_name, process, setup=None, teardown=None, argparser=None):
 
     context = None
     try:
-        user_data = get_user_data(setup)
+        user_data = get_user_data(setup, sn_ctx.args)
 
         context = build_context(box_name, sn_ctx, user_data)
         check_configuration(context, process)
@@ -55,9 +55,16 @@ def sn_main(box_name, process, setup=None, teardown=None, argparser=None):
             teardown_context(context)
 
 
-def get_user_data(setup):
+def get_user_data(setup, args):
     if setup:
-        user_data = setup()
+        number_of_arguments = len((inspect.signature(setup).parameters))
+        if number_of_arguments == 1:
+            user_data = setup(args)
+        else:
+            # Let the function fail in implicit way in case that setup callback
+            # has more than 1 argument
+            user_data = setup()
+
         if isinstance(user_data, dict):
             return user_data
         else:
