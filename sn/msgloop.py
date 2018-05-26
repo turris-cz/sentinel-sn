@@ -24,7 +24,7 @@ class LoopFail(Exception):
     pass
 
 
-def sn_main(box_name, process, setup=None, teardown=None, argparser=None):
+def sn_main(box_name, process, setup=None, teardown=None, before_first_request=None, argparser=None):
     sn_ctx = SN(zmq.Context.instance(), argparser or get_arg_parser())
 
     context = None
@@ -36,7 +36,8 @@ def sn_main(box_name, process, setup=None, teardown=None, argparser=None):
 
         logger.info("SN main starting loop for %s box", box_name)
         register_signals(context)
-        _sn_main_loop(context, process)
+
+        _sn_main_loop(context, before_first_request, process)
 
     except LoopHardFail as e:
         logger.error("Hard Fail of box: %s", context.name)
@@ -124,11 +125,16 @@ def teardown_context(context):
     context.zmq_ctx.destroy()
 
 
-def _sn_main_loop(context, process):
+def _sn_main_loop(context, before_first_request, process):
     if inspect.isgeneratorfunction(process):
         get_processed_message = processed_message_from_generator(context, process)
     else:
         get_processed_message = processed_message_from_function(context, process)
+
+    if before_first_request:
+        result = before_first_request(context)
+        if result:
+            process_result(context.socket_send, result)
 
     while context.loop_continue:
         try:
