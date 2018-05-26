@@ -137,7 +137,7 @@ def _sn_main_loop(context, process):
             raise e
 
         except Exception as e:
-            logger.error("Uncaught exception from loop")
+            logger.error("Uncaught exception from loop: %s", type(e).__name__)
             logger.exception(e)
 
             context.errors_in_row += 1
