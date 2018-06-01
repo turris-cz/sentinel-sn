@@ -160,6 +160,7 @@ class Socket:
     def configure(self, socket):
         if "ipv6" in self.configuration:
             socket.ipv6 = self.configuration["ipv6"]
+        socket.setsockopt(zmq.LINGER, 1*1000)  # In msec
 
 
 class SN:
