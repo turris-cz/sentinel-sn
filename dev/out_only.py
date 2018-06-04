@@ -7,32 +7,32 @@ import zmq
 import sn
 
 
-def setup():
-    return {
-            "foo": "bar",
-    }
-
-
-def teardown(context):
-    print("teardown")
-
-
-def process(context):
-    serial = 0
-    while True:
-        data = {
-            "foo": context.foo,
-            "serial": serial,
-            "ts": int(time.time()),
+class MyBox(sn.SNGeneratorBox):
+    def setup(self):
+        return {
+                "foo": "bar",
         }
 
-        serial += 1
+    def teardown(self):
+        print("teardown")
 
-        yield "sentinel/dev/sn", data
 
-        print("PUB", data)
-        time.sleep(1)
+    def process(self):
+        serial = 0
+        while True:
+            data = {
+                "foo": self.context.foo,
+                "serial": serial,
+                "ts": int(time.time()),
+            }
+
+            serial += 1
+
+            yield "sentinel/dev/sn", data
+
+            print("PUB", data)
+            time.sleep(1)
 
 
 if __name__ == "__main__":
-    sn.sn_main("out_only", process, setup=setup, teardown=teardown)
+    MyBox("out_only").run()

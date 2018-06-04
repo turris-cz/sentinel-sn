@@ -5,21 +5,21 @@ import zmq
 import sn
 
 
-def setup():
-    return {
-            "foo": "bar",
-    }
+class MyBox(sn.SNPipelineBox):
+    def setup(self):
+        return {
+                "foo": "bar",
+        }
+
+    def teardown(self):
+        print("teardown")
 
 
-def teardown(context):
-    print("teardown")
+    def process(self, msg_type, payload):
+        print(msg_type, payload)
 
-
-def process(context, msg_type, payload):
-    print(msg_type, payload)
-
-    return msg_type, payload
+        return msg_type, payload
 
 
 if __name__ == "__main__":
-    sn.sn_main("in_out", process, setup=setup, teardown=teardown)
+    MyBox("in_out").run()
