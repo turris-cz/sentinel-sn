@@ -147,6 +147,11 @@ class SNPipelineBox(SNBox):
         if not self.socket_recv and not self.socket_send:
             raise SetupError("Neither input nor output socket provided")
 
+    def teardown_box(self):
+        self.socket_recv.close()
+        self.socket_send.close()
+        super().teardown_box()
+
     def get_processed_message(self):
         msg = self.socket_recv.recv_multipart()
         msg_type, payload = parse_msg(msg)
@@ -183,6 +188,10 @@ class SNGeneratorBox(SNBox):
         if not inspect.isgeneratorfunction(self.process):
             raise SetupError("Generator is expected for output-only box")
 
+    def teardown_box(self):
+        self.socket_send.close()
+        super().teardown_box()
+
     def get_processed_message(self):
         return next(self.process_iterator)
 
@@ -208,6 +217,10 @@ class SNTerminationBox(SNBox):
     def check_configuration(self):
         if not self.socket_recv:
             raise SetupError("Input socket wasn't provided")
+
+    def teardown_box(self):
+        self.socket_recv.close()
+        super().teardown_box()
 
     def get_processed_message(self):
         msg = self.socket_recv.recv_multipart()
