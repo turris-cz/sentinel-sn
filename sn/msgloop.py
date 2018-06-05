@@ -112,6 +112,7 @@ class SNBox():
 
     def teardown_box(self):
         self.zmq_ctx.destroy()
+        self.logger.info("SNBox shutting down box %s", self.name)
 
     def run_loop(self):
         while self.loop_continue:
