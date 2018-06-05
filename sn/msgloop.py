@@ -246,3 +246,10 @@ class SNTerminationBox(SNBox):
     def process_result(self, result):
         if result:
             raise LoopFail("Input-only box generated output message. Possibly bug in box.")
+
+
+class SNMultipleOutputPipelineBox(SNPipelineBox):
+    def process_result(self, result):
+        if result:
+            for single_result in result:
+                super().process_result(single_result)
