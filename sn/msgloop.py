@@ -102,7 +102,7 @@ class SNBox():
             self.logger.info("Signal %s received", signum)
             self.loop_continue = False
 
-        for sig in [ signal.SIGHUP, signal.SIGTERM, signal.SIGQUIT, signal.SIGABRT ]:
+        for sig in [ signal.SIGTERM, signal.SIGQUIT, signal.SIGABRT ]:
             signal.signal(sig, signal_handler)
 
     def before_loop(self):
