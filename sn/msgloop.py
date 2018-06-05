@@ -156,8 +156,10 @@ class SNPipelineBox(SNBox):
         self.socket_send = self.get_socket("out")
 
     def check_configuration(self):
-        if not self.socket_recv and not self.socket_send:
-            raise SetupError("Neither input nor output socket provided")
+        if not self.socket_recv:
+            raise SetupError("Input socket wasn't provided")
+        if not self.socket_send:
+            raise SetupError("Output socket wasn't provided")
 
     def teardown_box(self):
         self.socket_recv.close()
