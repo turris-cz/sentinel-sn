@@ -21,7 +21,7 @@ class MyBox(sn.SNGeneratorBox):
         serial = 0
         while True:
             data = {
-                "foo": self.context.foo,
+                "foo": self.ctx.foo,
                 "serial": serial,
                 "ts": int(time.time()),
             }
