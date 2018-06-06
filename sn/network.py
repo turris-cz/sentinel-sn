@@ -1,4 +1,5 @@
 import re
+import socket
 
 import zmq
 
@@ -8,7 +9,7 @@ from .exceptions import *
 
 class Resource:
     NAME = re.compile("[a-z0-9_-]+")
-    ADDRESS = re.compile("[a-z0-9_-]+") #TODO Use something better
+    SIMPLE_ADDRESS = re.compile("[a-z0-9_-]+")
     DIRECTIONS = [
         "connect",
         "bind"
@@ -35,7 +36,7 @@ class Resource:
         if sock_type not in Resource.SOCK_TYPES:
             raise SockConfigError("Inadmissible or empty socket type")
 
-        if not Resource.ADDRESS.match(address) and address != "*":
+        if not self.check_address(address):
             raise SockConfigError("Inadmissible characters in resource address")
 
         try:
@@ -55,6 +56,28 @@ class Resource:
         self.sock_type = sock_type
         self.address = address
         self.port = port_number
+
+
+    def check_address(self, address):
+        if address == "*":
+            return True
+
+        if Resource.SIMPLE_ADDRESS.match(address):
+            return True
+
+        try:
+            if socket.inet_pton(socket.AF_INET, address):
+                return True
+        except OSError:
+            pass
+
+        try:
+            if socket.inet_pton(socket.AF_INET6, address.strip("[]")):
+                return True
+        except OSError:
+            pass
+
+        return False
 
 
     def get_connection_string(self):

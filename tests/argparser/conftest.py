@@ -51,6 +51,7 @@ def bad_resources_mock(request):
 @pytest.fixture(params=[
                         "--resource res,connect,PUSH,127.0.0.1,8800",
                         "--resource res,connect,PUSH,setinel.turris.cz,8800",
+                        "--resource res,connect,PUSH,[::1],8800",
                        ])
 def connect_resources_mock(request):
     with patch("sys.argv", args_from_string(request.param)) as m:
