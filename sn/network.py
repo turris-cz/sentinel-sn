@@ -167,6 +167,7 @@ class Socket:
             raise SockConfigError("Unmatched socket type with requested one")
 
         socket = ctx.socket(Socket.SOCKET_TYPE_MAP[self.my_type])
+        self.configure(socket)
 
         if self.my_direction == "bind":
             socket.bind(self.resources[0].get_connection_string())
@@ -174,8 +175,6 @@ class Socket:
         else:
             for resource in self.resources:
                 socket.connect(resource.get_connection_string())
-
-        self.configure(socket)
 
         return socket
 
