@@ -62,6 +62,8 @@ def connect_resources_mock(request):
                         "--resource res,bind,PUSH,*,8800",
                         "--resource res,bind,PULL,*,8801",
                         "--resource res,bind,PULL,127.0.0.1,8802",
+                        "--resource res,bind,PULL,::1,8802",
+                        "--resource res,bind,PULL,[::1],8802",
                        ])
 def bind_resources_mock(request):
     with patch("sys.argv", args_from_string(request.param)) as m:
