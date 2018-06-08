@@ -3,49 +3,89 @@ import pytest
 import sn
 
 def test_empty_name():
+    class TestBox(sn.SNPipelineBox):
+        pass
+
     with pytest.raises(TypeError):
-        sn.sn_main()
+        TestBox().run()
 
 
-def test_no_process():
-    with pytest.raises(TypeError):
-        sn.sn_main("test")
+def test_no_process(in_out_args_mock, recv_multipart_mock):
+    class TestBox(sn.SNPipelineBox):
+        pass
+
+    with pytest.raises(NotImplementedError):
+        TestBox("test").run()
 
 
-def test_at_least_one_socket(bad_socket_args_mock):
+def test_missing_in_socket_pipeline(out_only_args_mock):
+    class TestBox(sn.SNPipelineBox):
+        pass
+
     with pytest.raises(sn.SetupError) as e:
-        sn.sn_main("test", lambda: None)
-    assert str(e.value) == "Neither input nor output socket provided"
+        TestBox("test").run()
+
+    assert str(e.value) == "Input socket wasn't provided"
+
+
+def test_missing_out_socket_pipeline(in_only_args_mock):
+    class TestBox(sn.SNPipelineBox):
+        pass
+
+    with pytest.raises(sn.SetupError) as e:
+        TestBox("test").run()
+
+    assert str(e.value) == "Output socket wasn't provided"
+
+
+def test_missing_out_socket_generator(bad_socket_args_mock):
+    class TestBox(sn.SNGeneratorBox):
+        pass
+
+    with pytest.raises(sn.SetupError) as e:
+        TestBox("test").run()
+
+    assert str(e.value) == "Output socket wasn't provided"
+
+
+def test_missing_in_socket_termination(bad_socket_args_mock):
+    class TestBox(sn.SNTerminationBox):
+        pass
+
+    with pytest.raises(sn.SetupError) as e:
+        TestBox("test").run()
+
+    assert str(e.value) == "Input socket wasn't provided"
 
 
 def test_generator_needed(out_only_args_mock):
-    def process(u, t, p):
-        return t, p
+    class TestBox(sn.SNGeneratorBox):
+        def process(self, msg_type, payload):
+            return msg_type, payload
 
     with pytest.raises(sn.SetupError) as e:
-        sn.sn_main("test", process)
+        TestBox("test").run()
+
     assert str(e.value) == "Generator is expected for output-only box"
 
 
-def test_setup_dictionary(out_only_args_mock):
-    def setup():
-        return 42
+def test_setup_dictionary(in_out_args_mock):
+    class TestBox(sn.SNPipelineBox):
+        def setup(self):
+            return 42
 
     with pytest.raises(sn.SetupError) as e:
-        sn.sn_main("test", lambda: None, setup=setup)
+        TestBox("test").run()
+
     assert str(e.value) == "Setup function didn't return a dictionary"
 
 
-def test_setup_reserved_word(out_only_args_mock):
-    def setup():
-        return { "name": "foo" }
-
-    with pytest.raises(sn.SetupError) as e:
-        sn.sn_main("test", lambda: None, setup=setup)
-    assert "Used reserved word in user_data" in str(e.value)
-
-
 def test_unnecessary_output(in_only_args_mock, recv_multipart_mock):
+    class TestBox(sn.SNTerminationBox):
+        def process(self, msg_type, payload):
+            return msg_type, payload
+
     with pytest.raises(sn.SetupError) as e:
-        sn.sn_main("test", lambda u, t, p: ("foo", "bar"))
-    assert str(e.value) == "Box generated output but there is any output socket. Bad configuration?"
+        TestBox("test").run()
+
+    assert str(e.value) == "Input-only box generated output message. Possibly bug in box."
