@@ -245,7 +245,7 @@ class SNTerminationBox(SNBox):
 
     def process_result(self, result):
         if result:
-            raise LoopFail("Input-only box generated output message. Possibly bug in box.")
+            raise SetupError("Input-only box generated output message. Possibly bug in box.")
 
 
 class SNMultipleOutputPipelineBox(SNPipelineBox):
