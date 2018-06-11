@@ -48,7 +48,7 @@ class Resource:
             raise SockConfigError("Port number is out of range (0-65535)")
 
         # This is a little bit higher logic
-        if address == "*" and direction == "connect":
+        if address == "*" and direction != "bind":
             raise SockConfigError("On '*' is only bind operation permitted")
 
         self.name = name
