@@ -212,8 +212,7 @@ class SN:
 
 
     def parse_resources(self):
-        ## Currently I don't know why but resources is array of arrays
-        self.resources = [ Resource.from_string(res[0]) for res in self.args.resource ]
+        self.resources = [ Resource.from_string(res) for res in self.args.resource ]
 
 
     def build_sockets(self):

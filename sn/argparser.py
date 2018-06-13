@@ -13,7 +13,6 @@ def get_arg_parser():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('--resource',
-                        nargs=1,
                         action='append',
                         required=True,
                         help='resource format: sockname,[connect/bind],sock_type,ip_address,port'
