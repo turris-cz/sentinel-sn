@@ -41,6 +41,8 @@ def empty_args_mock():
                             " --resource res,connect,PUSH,localhost,8800",
                         "--resource res,bind,PULL,localhost,8800"
                             " --resource res,bind,PULL,localhost,8800",
+                        "--resource res,bind,PULL,localhost,8800"
+                            " --resource res,bind,PUSH,localhost,8800",
 
                        ])
 def bad_resources_mock(request):
