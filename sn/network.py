@@ -59,12 +59,6 @@ class Resource:
 
 
     def check_address(self, address):
-        if address == "*":
-            return True
-
-        if Resource.SIMPLE_ADDRESS.match(address):
-            return True
-
         try:
             if socket.inet_pton(socket.AF_INET, address):
                 return True
@@ -76,6 +70,12 @@ class Resource:
                 return True
         except OSError:
             pass
+
+        if address == "*":
+            return True
+
+        if Resource.SIMPLE_ADDRESS.match(address):
+            return True
 
         return False
 
