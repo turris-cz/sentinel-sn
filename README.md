@@ -83,7 +83,7 @@ class MyBox(SNPipelineBox):
 
             return msg_type, payload
 
-if __name__ = "__main__":
+if __name__ == "__main__":
     MyBox("by_box_name").run()
 ```
 
