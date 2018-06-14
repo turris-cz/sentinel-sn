@@ -15,16 +15,7 @@ def test_context_data_passed(in_out_args_mock, recv_multipart_mock, send_multipa
     recv_multipart_mock.side_effect = side_effect()
 
     class TestBox(sn.SNPipelineBox):
-        def setup(self):
-            return {
-                    "foo": "bar",
-            }
-
-        def teardown(self):
-            pass
-
-        def process(self, msg_type, payload):
-            return msg_type, payload
+        pass
 
     tb = TestBox("test")
     tb.setup = mock_setup = Mock(return_value={"foo": "bar"})
