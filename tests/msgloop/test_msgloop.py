@@ -102,3 +102,51 @@ def test_resetable_error_counter(out_only_args_mock, send_multipart_mock):
     TestBox("test").run()
 
     assert send_multipart_mock.called
+
+
+def test_before_first_request_processed(out_only_args_mock, send_multipart_mock):
+    class TestBox(sn.SNGeneratorBox):
+        def before_first_request(self):
+            return "sentinel/test/bfr", { "foo": "bar" }
+        def process(self):
+            yield "sentinel/test", { "foo": "bar" }
+
+    tb = TestBox("test")
+    tb.run()
+
+    assert send_multipart_mock.called
+    assert send_multipart_mock.call_count == 2
+
+    assert send_multipart_mock.call_args_list[0][0][0][0] == b"sentinel/test/bfr"
+    assert send_multipart_mock.call_args_list[1][0][0][0] == b"sentinel/test"
+
+
+def test_set_signal_handlers(out_only_args_mock, send_multipart_mock):
+    class TestBox(sn.SNGeneratorBox):
+        def process(self):
+            yield "sentinel/test", { "foo": "bar" }
+
+    with patch("signal.signal") as signal:
+        tb = TestBox("test")
+        tb.run()
+
+        assert signal.called
+
+
+def test_signal_handler_stops_loop(in_out_args_mock, recv_multipart_mock, send_multipart_mock):
+    class TestBox(sn.SNPipelineBox):
+        pass
+
+    def se(t, p):
+        # I will be happy for better solution...
+        import signal
+        sh = signal.getsignal(signal.SIGTERM)
+        sh(None, None)
+        return t, p
+
+    tb = TestBox("test")
+    tb.process = Mock(side_effect=se)
+    tb.run()
+
+    assert send_multipart_mock.called
+    assert send_multipart_mock.call_count == 1
