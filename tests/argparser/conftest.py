@@ -18,6 +18,12 @@ def one_resource_mock():
 
 
 @pytest.fixture
+def verbose_args_mock():
+    with patch("sys.argv", args_from_string("--resource res,connect,PUSH,127.0.0.1,8800 -v")) as m:
+        yield m
+
+
+@pytest.fixture
 def empty_args_mock():
     with patch("sys.argv", args_from_string("")) as m:
         yield m

@@ -50,3 +50,12 @@ def test_required_type_decline(zmq_context, one_resource_mock):
         ctx = sn.SN(zmq_context)
         assert ctx
         assert ctx.get_socket(("res", "PUB"))
+
+
+def test_verbose(zmq_context, verbose_args_mock):
+    ctx = sn.SN(zmq_context)
+
+    import logging
+
+    logger = logging.getLogger("tests")
+    assert logger.getEffectiveLevel() == logging.DEBUG
