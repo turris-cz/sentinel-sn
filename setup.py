@@ -19,6 +19,7 @@ setup(name = "sn",
         "tests": [
             "pytest",
             "coverage",
+            "pytest-cov",
         ],
         "docs": [
             "Sphinx",
