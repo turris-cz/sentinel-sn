@@ -1,5 +1,9 @@
 # SN - Sentinel networking library
 
+[![pipeline status](https://gitlab.labs.nic.cz/turris/sentinel/sn/badges/master/pipeline.svg)](https://gitlab.labs.nic.cz/turris/sentinel/sn/commits/master)
+[![coverage report](https://gitlab.labs.nic.cz/turris/sentinel/sn/badges/master/coverage.svg)](https://gitlab.labs.nic.cz/turris/sentinel/sn/commits/master)
+
+
 This package implements a bunch of features that are common for all Sentinel
 boxes:
 
