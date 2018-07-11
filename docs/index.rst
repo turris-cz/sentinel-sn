@@ -11,6 +11,9 @@ SN - Sentinel networking library
    :caption: Contents:
 
 
+  snbox
+  non_abstract_boxes
+
 
 Indices and tables
 ==================
