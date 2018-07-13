@@ -173,6 +173,19 @@ Box should not use any other `self` data.
 
 Basic examples are provided in `dev/` directory.
 
+#### Programmer documentation
+
+There is also available documentation more suitable for programmers of lower levels.
+
+It is available in `docs/` directory and could be generated with `sphinx` tool:
+
+```
+pip install .[docs]
+cd docs/
+make html
+BROWSER _build/html/index.html
+```
+
 ## sn.SN
 
 ```python
