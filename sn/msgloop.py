@@ -165,8 +165,7 @@ class SNBox():
             self.run_loop()
 
         except LoopHardFail as e:
-            self.logger.error("Hard Fail of box: %s", self.name)
-            self.logger.exception(e)
+            self.logger.exception("Hard Fail of box: %s", self.name)
             # Finally will be called, because sys.exit() raises exception that will be uncaught.
             sys.exit(1)
 
@@ -224,8 +223,7 @@ class SNBox():
                 raise e
 
             except Exception as e:
-                self.logger.error("Uncaught exception from loop: %s", type(e).__name__)
-                self.logger.exception(e)
+                self.logger.exception("Uncaught exception from loop")
 
                 self.errors_in_row += 1
                 if self.errors_in_row > 10:
