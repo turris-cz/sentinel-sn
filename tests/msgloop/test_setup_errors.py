@@ -40,7 +40,8 @@ def test_missing_out_socket_pipeline(in_only_args_mock):
 
 def test_missing_out_socket_generator(bad_socket_args_mock):
     class TestBox(sn.SNGeneratorBox):
-        pass
+        def process(self):
+            yield None
 
     with pytest.raises(sn.SetupError) as e:
         TestBox("test").run()
