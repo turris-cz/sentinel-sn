@@ -311,8 +311,8 @@ class SNGeneratorBox(SNBox):
         super().__init__(box_name, argparser)
         self.socket_send = self.get_socket("out")
 
-        # Ensure about process() method before try to get iterator
-        self.check_configuration()
+        if not inspect.isgeneratorfunction(self.process):
+            raise SetupError("Generator is expected for output-only box")
 
         self.process_iterator = self.process()
 
@@ -320,8 +320,6 @@ class SNGeneratorBox(SNBox):
         """Check *out* resource and check if :meth:`process` is a generator."""
         if not self.socket_send:
             raise SetupError("Output socket wasn't provided")
-        if not inspect.isgeneratorfunction(self.process):
-            raise SetupError("Generator is expected for output-only box")
 
     def teardown_box(self):
         """Explicitly closes *out* socket and calls method of ancestor."""
