@@ -10,7 +10,7 @@ import zmq
 from .network import SN
 from .network import get_arg_parser
 from .messages import encode_msg, parse_msg
-from .exceptions import *
+from .exceptions import SetupError, UndefinedSocketError, InvalidMsgError
 
 
 class LoopHardFail(Exception):
