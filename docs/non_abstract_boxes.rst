@@ -3,9 +3,9 @@ Non-abstract boxes
 
 **Terminology** for boxes:
 
-* **in-out** box - box receives message, processes message and sends (typically modified/enriched) message.
-* **out-only** box - box doesn't have sentinel input, but generates messages by another mechanism - from redis/DB/etc.
-* **in-only** box - box receives message and doesn't propagate it - it stores it to DB or something else.
+* **in-out** box - box receives messages, processes messages and sends (typically modified/enriched) them out.
+* **out-only** box - box doesn't receive messages, but generates messages by another mechanism - from redis/DB/etc.
+* **in-only** box - box only receives messages and stores them to DB or something elsewhere.
 
 
 SNPipelineBox

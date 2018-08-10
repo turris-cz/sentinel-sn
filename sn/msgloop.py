@@ -64,7 +64,7 @@ class SNBox():
     def check_configuration(self):
         """Check configuration of the box.
 
-        Check if box is able to start according to non-abstract box
+        It checks if box is able to start according to non-abstract box
         requirements.
 
         Method is called at least at the beginning of :meth:`run` method but
@@ -84,14 +84,14 @@ class SNBox():
     def process_result(self, result):
         """Process generated message.
 
-        It usually means send to the Sentinel network. This method provides
+        It usually means sending message to the Sentinel network. This method provides
         variability in result format.
         """
         raise NotImplementedError("process_result")
 
     # Public API for boxes - will be optionally implemented in final boxes
     def setup(self):
-        """Setup all user's data.
+        """Set all user's data up.
 
         This method is considered as a "constructor" for final-box. You can
         allocate resources here or initialize important variables.
@@ -99,12 +99,12 @@ class SNBox():
         Final-box is not allowed to store its data as member variables (self.*).
         It is considered as security mechanism. Every final-box must return a
         dictionary. Variables will be available as ``self.ctx.dict_key`` in
-        another callbacks trough ``types.SimpleNamespace()``.
+        another callbacks through ``types.SimpleNamespace()``.
 
         Setup is called at the beginning of :meth:`run` method, so there should be
         all the box resources available.
 
-        Default implementation is pass.
+        Default implementation returns empty dictionary.
         """
 
         return {}
@@ -112,7 +112,7 @@ class SNBox():
     def teardown(self):
         """Destroy allocated resources.
 
-        This is place to release allocated resources if needed. Namesace
+        This is place to release allocated resources if needed. Namespace
         ``self.ctx`` is still available at this point.
 
         Default implementation is pass.
@@ -122,10 +122,10 @@ class SNBox():
     def before_first_request(self):
         """Generate message or do some other pre-run thing.
 
-        At this point is box fully set up but there is no message received.
+        At this point, the box is fully set up but there is no message received.
         With return value is treated in the same manner as :meth:`process` does.
 
-        It is useful for some initialisation message.
+        It is useful for some initialization message.
 
         Default implementation is pass.
         """
@@ -244,31 +244,31 @@ class SNBox():
 class SNPipelineBox(SNBox):
     """SNPipelineBox is implementation of **in-out** box.
 
-    It expects 2 specified resources called *in* and *out*. Then receives
-    messages from *in* resource, process message and sends the result to *out*
+    It expects 2 specified resources called *in* and *out*. Then it receives
+    messages from *in* resource, it processes messages and sends the result to *out*
     resource.
     """
     def __init__(self, box_name, argparser=None):
-        """Initializes *in* and *out* resources."""
+        """Initialize *in* and *out* resources."""
         super().__init__(box_name, argparser)
         self.socket_recv = self.get_socket("in")
         self.socket_send = self.get_socket("out")
 
     def check_configuration(self):
-        """Check if *in* and *out* are provided by arguments."""
+        """Checks if *in* and *out* are provided by arguments."""
         if not self.socket_recv:
             raise SetupError("Input socket wasn't provided")
         if not self.socket_send:
             raise SetupError("Output socket wasn't provided")
 
     def teardown_box(self):
-        """Explicitly closes *in* and *out* sockets and calls method of ancestor."""
+        """Close *in* and *out* sockets explicitly and calls method of ancestor."""
         self.socket_recv.close()
         self.socket_send.close()
         super().teardown_box()
 
     def get_processed_message(self):
-        """Receive message from *in* socket, parse it by :func:`parse_msg` and
+        """Receive message from *in* socket and parses it by :func:`parse_msg` and
         call :meth:`process` method.
         """
         msg = self.socket_recv.recv_multipart()
@@ -277,7 +277,7 @@ class SNPipelineBox(SNBox):
         return self.process(msg_type, payload)
 
     def process_result(self, result):
-        """Check if :meth:`process` provided any answer and sent it to *out*
+        """It checks if :meth:`process` has provided any answer and sends it to *out*
         socket.
         """
         if not result:
@@ -298,16 +298,16 @@ class SNGeneratorBox(SNBox):
 
     It expects only *out* resource.
 
-    There is one big difference: :meth:`process` doesn't take ``msg_type`` and
+    There is one big difference: :meth:`process` doesn't accept ``msg_type`` and
     ``payload`` arguments and it must be a Python *generator*. (So it
-    yields  it's results and doesn't return them.
+    yields it's results - it doesn't return them.
 
-    **Warning**: ``SNBox`` is not able to provide it's standard protection
+    **Warning**: ``SNBox`` in such case is not able to provide it's standard protection
     because Python generators automatically raises ``StopIteration`` after
     uncatched exceptions.
     """
     def __init__(self, box_name, argparser=None):
-        """Initializes *out* resource."""
+        """Initialize *out* resource."""
         super().__init__(box_name, argparser)
         self.socket_send = self.get_socket("out")
 
@@ -317,21 +317,21 @@ class SNGeneratorBox(SNBox):
         self.process_iterator = self.process()
 
     def check_configuration(self):
-        """Check *out* resource and check if :meth:`process` is a generator."""
+        """Check *out* resource."""
         if not self.socket_send:
             raise SetupError("Output socket wasn't provided")
 
     def teardown_box(self):
-        """Explicitly closes *out* socket and calls method of ancestor."""
+        """It closes *out* socket explicitly and calls method of ancestor."""
         self.socket_send.close()
         super().teardown_box()
 
     def get_processed_message(self):
-        """Calls ``next()`` on :meth:`process` generator."""
+        """Call ``next()`` on :meth:`process` generator."""
         return next(self.process_iterator)
 
     def process_result(self, result):
-        """Check if :meth:`process` provided any answer and sent it to *out*
+        """It checks if :meth:`process` has provided any answer and sends it to *out*
         socket.
         """
         if not result:
@@ -354,7 +354,7 @@ class SNTerminationBox(SNBox):
     :meth:`process` has any result.
     """
     def __init__(self, box_name, argparser=None):
-        """Initializes *in* resource."""
+        """Initialize *in* resource."""
         super().__init__(box_name, argparser)
         self.socket_recv = self.get_socket("in")
 
@@ -364,13 +364,13 @@ class SNTerminationBox(SNBox):
             raise SetupError("Input socket wasn't provided")
 
     def teardown_box(self):
-        """Explicitly closes *in* socket and calls method of ancestor."""
+        """It closes *in* socket and calls method of ancestor."""
         self.socket_recv.close()
         super().teardown_box()
 
     def get_processed_message(self):
-        """Receive message from *in* socket, parse it by :func:`parse_msg` and
-        call :meth:`process` method.
+        """It receives message from *in* socket and parses it by :func:`parse_msg` and
+        calls :meth:`process` method.
         """
         msg = self.socket_recv.recv_multipart()
         msg_type, payload = parse_msg(msg)
@@ -378,7 +378,7 @@ class SNTerminationBox(SNBox):
         return self.process(msg_type, payload)
 
     def process_result(self, result):
-        """Raises :exc:`sn.SetupError` because there is no resutl expected."""
+        """It raises :exc:`sn.SetupError` because there is no result expected."""
         if result:
             raise SetupError("Input-only box generated output message. Possibly bug in box.")
 
@@ -386,12 +386,12 @@ class SNTerminationBox(SNBox):
 class SNMultipleOutputPipelineBox(SNPipelineBox):
     """SNMultipleOutputPipelineBox is implementation of **in-out** box.
 
-    Its based on :class:`SNPipelineBox`. The only difference that it expects
+    It's based on :class:`SNPipelineBox`. The only difference is that it expects
     not only one result but a ``list`` of results.
     """
     def process_result(self, result):
-        """Checks if :meth:`process` returned result, iterates over result and
-        call :meth:`process_result` of ancestor for each sub-result.
+        """It checks if :meth:`process` has returned result, it iterates over result and
+        calls :meth:`process_result` of ancestor for each sub-result.
         """
         if result:
             for single_result in result:
