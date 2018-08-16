@@ -6,7 +6,7 @@ import sn
 
 def args_from_string(s):
     args = ["prog"]
-    args.extend(s.split(" "))
+    args.extend([a for a in s.split(" ") if a])
 
     return args
 
