@@ -2,10 +2,9 @@ import pytest
 
 import zmq
 
-import sn
-
 # This test proof that SN class is really able to generate working sockets.
 # More input brutal test is in module argparser.
+
 
 @pytest.fixture
 def socket_binded():
@@ -16,6 +15,7 @@ def socket_binded():
     yield s
     s.close()
     ctx.destroy()
+
 
 @pytest.fixture
 def socket_connected():

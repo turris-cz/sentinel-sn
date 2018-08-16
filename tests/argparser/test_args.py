@@ -1,19 +1,20 @@
 import pytest
 
-import argparse
 import zmq
 
 import sn
 
+
 def test_empty_args(zmq_context, empty_args_mock):
     with pytest.raises(SystemExit):
-        ctx = sn.SN(zmq_context)
+        sn.SN(zmq_context)
 
 
 def test_undefined_resource(zmq_context, one_resource_mock):
     with pytest.raises(sn.UndefinedSocketError):
         ctx = sn.SN(zmq_context)
         assert ctx.get_socket("in")
+
 
 def test_bad_args(zmq_context, bad_resources_mock):
     with pytest.raises((SystemExit, sn.SockConfigError, zmq.error.ZMQError)):
@@ -53,7 +54,7 @@ def test_required_type_decline(zmq_context, one_resource_mock):
 
 
 def test_verbose(zmq_context, verbose_args_mock):
-    ctx = sn.SN(zmq_context)
+    sn.SN(zmq_context)
 
     import logging
 

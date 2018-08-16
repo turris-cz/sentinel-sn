@@ -60,4 +60,5 @@ def log_uncaught(exc_type, exc_value, exc_traceback):
     root_logger.exception("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
 
+
 sys.excepthook = log_uncaught

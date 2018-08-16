@@ -4,7 +4,7 @@ import socket
 import zmq
 
 from .argparser import get_arg_parser
-from .exceptions import *
+from .exceptions import SockConfigError, UndefinedSocketError
 
 
 class Resource:
@@ -57,7 +57,6 @@ class Resource:
         self.address = address
         self.port = port_number
 
-
     def check_address(self, address):
         try:
             if socket.inet_pton(socket.AF_INET, address):
@@ -79,10 +78,8 @@ class Resource:
 
         return False
 
-
     def get_connection_string(self):
         return "tcp://{}:{}".format(self.address, self.port)
-
 
     @classmethod
     def from_string(cls, arg):
@@ -93,7 +90,6 @@ class Resource:
 
         return cls(*splitted)
 
-
     def __eq__(self, other):
         if self.name == other.name and \
                self.direction == other.direction and \
@@ -103,7 +99,6 @@ class Resource:
             return True
 
         return False
-
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -130,7 +125,6 @@ class Socket:
         self.configuration = configuration
         self.setup_done = False
 
-
     def check_resource(self, resource):
         if self.name != resource.name:
             raise SockConfigError("Putting bad resource to socket")
@@ -150,14 +144,12 @@ class Socket:
         if resource in self.resources:
             raise SockConfigError("Resource duplication")
 
-
     def add_resource(self, resource):
         self.check_resource(resource)
 
         self.resources.append(resource)
 
         self.setup_done = True
-
 
     def build(self, ctx, name, sock_type=None):
         if self.name != name:
@@ -178,7 +170,6 @@ class Socket:
 
         return socket
 
-
     def configure(self, socket):
         if "ipv6" in self.configuration:
             socket.ipv6 = self.configuration["ipv6"]
@@ -191,7 +182,7 @@ class SN:
     resources.
     """
     def __init__(self, ctx, argparser=None):
-        ## Gather data
+        # Gather data
         self.context = ctx
 
         if argparser:
@@ -199,21 +190,18 @@ class SN:
         else:
             self.args = get_arg_parser().parse_args()
 
-        ## Build all necessary configuration
+        # Build all necessary configuration
         self.build_global_configuration()
         self.parse_resources()
         self.build_sockets()
-
 
     def build_global_configuration(self):
         self.global_configuration = {
             "ipv6": not self.args.disable_ipv6,
         }
 
-
     def parse_resources(self):
-        self.resources = [ Resource.from_string(res) for res in self.args.resource ]
-
+        self.resources = [Resource.from_string(res) for res in self.args.resource]
 
     def build_sockets(self):
         self.sockets = {}
@@ -223,7 +211,6 @@ class SN:
                 self.sockets[resource.name] = Socket(resource.name, **self.global_configuration)
 
             self.sockets[resource.name].add_resource(resource)
-
 
     def get_socket(self, *requested_sockets):
         """ Gets multiple socket names in 'get_socket(name1, name2,...)'

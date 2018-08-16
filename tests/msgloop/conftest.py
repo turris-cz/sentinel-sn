@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import msgpack
 
+
 def args_from_string(s):
     args = ["prog"]
     args.extend(s.split(" "))
@@ -64,7 +65,7 @@ def bad_socket_args_mock(bad_socket_args):
 
 @pytest.fixture
 def good_msg():
-    return build_msg("sentinel/test", { "foo": "bar" })
+    return build_msg("sentinel/test", {"foo": "bar"})
 
 
 @pytest.fixture

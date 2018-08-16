@@ -2,6 +2,7 @@ import pytest
 
 import sn
 
+
 def test_empty_name():
     class TestBox(sn.SNPipelineBox):
         pass

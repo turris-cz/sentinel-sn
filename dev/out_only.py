@@ -2,8 +2,6 @@
 
 import time
 
-import zmq
-
 import sn
 
 
@@ -15,7 +13,6 @@ class MyBox(sn.SNGeneratorBox):
 
     def teardown(self):
         print("teardown")
-
 
     def process(self):
         serial = 0

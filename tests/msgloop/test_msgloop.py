@@ -1,5 +1,3 @@
-from .conftest import build_msg
-
 import pytest
 from unittest.mock import Mock, patch
 
@@ -66,12 +64,12 @@ def test_processed_from_generator(out_only_args_mock, send_multipart_mock):
     class TestBox(sn.SNGeneratorBox):
         def process(self):
             for i in range(msg_num):
-                yield "sentinel/test", { "foo": "bar" }
+                yield "sentinel/test", {"foo": "bar"}
 
     TestBox("test").run()
 
     assert send_multipart_mock.called
-    assert send_multipart_mock.call_count == msg_num 
+    assert send_multipart_mock.call_count == msg_num
     assert send_multipart_mock.call_args[0][0][0] == b"sentinel/test"
 
 
@@ -79,7 +77,7 @@ def test_many_errors_in_row(out_only_args_mock, send_multipart_mock):
     class TestBox(sn.SNGeneratorBox):
         def process(self):
             while True:
-                yield "šentinel/test", { "foo": "bar" }
+                yield "šentinel/test", {"foo": "bar"}
 
     tb = TestBox("test")
 
@@ -96,8 +94,8 @@ def test_resetable_error_counter(out_only_args_mock, send_multipart_mock):
     class TestBox(sn.SNGeneratorBox):
         def process(self):
             for i in range(10):
-                yield "šentinel/test", { "foo": "bar" }
-            yield "sentinel/test", { "foo": "bar" }
+                yield "šentinel/test", {"foo": "bar"}
+            yield "sentinel/test", {"foo": "bar"}
 
     TestBox("test").run()
 
@@ -107,9 +105,10 @@ def test_resetable_error_counter(out_only_args_mock, send_multipart_mock):
 def test_before_first_request_processed(out_only_args_mock, send_multipart_mock):
     class TestBox(sn.SNGeneratorBox):
         def before_first_request(self):
-            return "sentinel/test/bfr", { "foo": "bar" }
+            return "sentinel/test/bfr", {"foo": "bar"}
+
         def process(self):
-            yield "sentinel/test", { "foo": "bar" }
+            yield "sentinel/test", {"foo": "bar"}
 
     tb = TestBox("test")
     tb.run()
@@ -124,7 +123,7 @@ def test_before_first_request_processed(out_only_args_mock, send_multipart_mock)
 def test_set_signal_handlers(out_only_args_mock, send_multipart_mock):
     class TestBox(sn.SNGeneratorBox):
         def process(self):
-            yield "sentinel/test", { "foo": "bar" }
+            yield "sentinel/test", {"foo": "bar"}
 
     with patch("signal.signal") as signal:
         tb = TestBox("test")

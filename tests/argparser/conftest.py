@@ -2,7 +2,6 @@ import pytest
 
 from unittest.mock import patch
 
-import sn
 
 def args_from_string(s):
     args = ["prog"]
@@ -44,11 +43,11 @@ def empty_args_mock():
                         "--resource res,connect,PUSH,*,8800",
                         "--resource res,conn,PUSH,127.0.0.1,8800",
                         "--resource res,connect,PUSH,localhost,8800"
-                            " --resource res,connect,PUSH,localhost,8800",
+                        "     --resource res,connect,PUSH,localhost,8800",
                         "--resource res,bind,PULL,localhost,8800"
-                            " --resource res,bind,PULL,localhost,8800",
+                        "     --resource res,bind,PULL,localhost,8800",
                         "--resource res,bind,PULL,localhost,8800"
-                            " --resource res,bind,PUSH,localhost,8800",
+                        "     --resource res,bind,PUSH,localhost,8800",
 
                        ])
 def bad_resources_mock(request):
@@ -80,13 +79,13 @@ def bind_resources_mock(request):
 
 @pytest.fixture(params=[
                         "--resource res1,connect,PUSH,localhost,8800"
-                            " --resource res2,connect,PUSH,localhost,8800",
+                        "     --resource res2,connect,PUSH,localhost,8800",
                         "--resource res1,connect,PUSH,localhost,8800"
-                            " --resource res1,connect,PUSH,localhost,8801"
-                            " --resource res2,connect,PUB,localhost,8802",
+                        "     --resource res1,connect,PUSH,localhost,8801"
+                        "     --resource res2,connect,PUB,localhost,8802",
                         "--resource res1,connect,PUB,localhost,8800"
-                            " --resource res1,connect,PUB,localhost,8801"
-                            " --resource res2,connect,PUB,localhost,8802",
+                        "     --resource res1,connect,PUB,localhost,8801"
+                        "     --resource res2,connect,PUB,localhost,8802",
                        ])
 def multisock_resources_mock(request):
     with patch("sys.argv", args_from_string(request.param)) as m:

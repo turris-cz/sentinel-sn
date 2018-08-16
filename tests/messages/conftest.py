@@ -2,9 +2,11 @@ import pytest
 
 import msgpack
 
+
 @pytest.fixture
 def good_type():
     return "sentinel/tests/good_string"
+
 
 @pytest.fixture(params=[
                         "sentinel",
@@ -20,6 +22,7 @@ def good_type():
                         ])
 def good_types(request):
     return request.param
+
 
 @pytest.fixture(params=[
                         "/sentinel/tests/broken",
@@ -41,6 +44,7 @@ def good_types(request):
 def bad_types(request):
     return request.param
 
+
 @pytest.fixture
 def good_payload():
     return {
@@ -50,12 +54,14 @@ def good_payload():
         "key4": "ěščřžýáíé",
     }
 
+
 @pytest.fixture
 def good_msg(good_type, good_payload):
     t = bytes(good_type, encoding="UTF-8")
     p = msgpack.packb(good_payload, encoding="UTF-8")
 
     return (t, p)
+
 
 @pytest.fixture
 def good_long(good_type, good_payload):
@@ -64,6 +70,7 @@ def good_long(good_type, good_payload):
     x = msgpack.packb(good_payload, encoding="UTF-8")
 
     return (t, p, x)
+
 
 @pytest.fixture(params=[1, 5, 7, 9, 12, 15, 18, 20])
 def broken_msg(request, good_msg):
@@ -79,10 +86,12 @@ def broken_msg(request, good_msg):
 
     return (good_msg[0], msg)
 
+
 @pytest.fixture
 def good_type_msg(good_types, good_msg):
     t = bytes(good_types, encoding="UTF-8")
     return (t, good_msg[1])
+
 
 @pytest.fixture
 def broken_type_msg(bad_types, good_msg):

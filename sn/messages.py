@@ -2,10 +2,11 @@ import re
 
 import msgpack
 
-from .exceptions import *
+from .exceptions import InvalidMsgError, InvalidMsgTypeError
 
 SN_MSG_REGEXP = "^([a-z0-9_]+/)*[a-z0-9_]+$"
 SN_MSG = re.compile(SN_MSG_REGEXP)
+
 
 def parse_msg(data):
     """ Gets a Sentinel-type ZMQ message and parses message type and its
@@ -22,7 +23,6 @@ def parse_msg(data):
 
     except (TypeError, msgpack.exceptions.UnpackException, UnicodeDecodeError):
         raise InvalidMsgError("Broken message")
-
 
     return msg_type, payload
 
