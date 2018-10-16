@@ -34,6 +34,8 @@ tmux send-keys "./in_out.py --resource 'in,bind,PULL,*,8801' --resource 'out,con
 # Attach the session
 tmux attach-session -t "$SESSION"
 
-if [ "$1" = "kill" ]; then
-	tmux kill-session -t "$SESSION"
+if [ "$1" = "keep" ]; then
+	exit
 fi
+
+tmux kill-session -t "$SESSION"
