@@ -6,7 +6,7 @@ import logging
 from .messages import encode_msg
 
 
-RUN_EVERY = 1
+RUN_EVERY = 10
 HB_RATE = 5
 
 
