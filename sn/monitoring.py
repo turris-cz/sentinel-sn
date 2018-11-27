@@ -111,11 +111,13 @@ class LogMonitoring(MonitoringBase):
 class SentinelMonitoring(MonitoringBase):
     def __init__(self, box_name, socket):
         self.socket = socket
+        self.socket_lock = threading.Lock()
         super().__init__(box_name)
 
     def _store_msg(self, msg_type, payload):
         msg = encode_msg(msg_type, payload)
-        self.socket.send_multipart(msg)
+        with self.socket_lock:
+            self.socket.send_multipart(msg)
 
 
 def Monitoring(box_name, socket=None):
