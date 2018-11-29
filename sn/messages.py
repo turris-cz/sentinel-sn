@@ -16,12 +16,12 @@ def parse_msg(data):
         msg_type = str(data[0], encoding="UTF-8")
         if not SN_MSG.match(msg_type):
             raise InvalidMsgTypeError("Bad message type definition")
-        payload = msgpack.unpackb(data[1], encoding="UTF-8")
+        payload = msgpack.unpackb(data[1], raw=False)
 
     except IndexError:
         raise InvalidMsgError("Not enough parts in message")
 
-    except (TypeError, msgpack.exceptions.UnpackException, UnicodeDecodeError):
+    except (ValueError, TypeError, msgpack.exceptions.UnpackException, UnicodeDecodeError):
         raise InvalidMsgError("Broken message")
 
     return msg_type, payload
@@ -39,6 +39,6 @@ def encode_msg(msg_type, data):
         raise InvalidMsgError("Empty payload parameter")
 
     b = bytes(msg_type, encoding="UTF-8")
-    msg = msgpack.packb(data)
+    msg = msgpack.packb(data, use_bin_type=True)
 
     return (b, msg)

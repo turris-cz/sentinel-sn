@@ -58,7 +58,7 @@ def good_payload():
 @pytest.fixture
 def good_msg(good_type, good_payload):
     t = bytes(good_type, encoding="UTF-8")
-    p = msgpack.packb(good_payload, encoding="UTF-8")
+    p = msgpack.packb(good_payload, use_bin_type=True)
 
     return (t, p)
 
@@ -66,8 +66,8 @@ def good_msg(good_type, good_payload):
 @pytest.fixture
 def good_long(good_type, good_payload):
     t = bytes(good_type, encoding="UTF-8")
-    p = msgpack.packb(good_payload, encoding="UTF-8")
-    x = msgpack.packb(good_payload, encoding="UTF-8")
+    p = msgpack.packb(good_payload, use_bin_type=True)
+    x = msgpack.packb(good_payload, use_bin_type=True)
 
     return (t, p, x)
 

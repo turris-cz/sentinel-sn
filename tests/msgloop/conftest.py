@@ -14,7 +14,7 @@ def args_from_string(s):
 
 def build_msg(msg_type, payload):
     t = bytes(msg_type, encoding="UTF-8")
-    p = msgpack.packb(payload, encoding="UTF-8")
+    p = msgpack.packb(payload, use_bin_type=True)
 
     return (t, p)
 
