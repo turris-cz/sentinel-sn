@@ -44,18 +44,21 @@ class MonitoringBase:
         self.hb_thread.start()
 
     def stats_thread_worker(self):
+        msg = {
+            "box": self.name,
+            "id": self.id,
+        }
+
         while True:
             start_at = time.time()
 
             # DO WORK
             with self.lock:
-                msg = self._get_counters()
+                msg["metrics"] = self._get_counters()
                 self._reset_counters()
 
-            if msg:
+            if msg["metrics"]:
                 msg["ts"] = int(time.time())
-                msg["box"] = self.name
-                msg["id"] = self.id
                 self._store_msg("sentinel/monitoring/stats", msg)
 
             # WORK DONE
