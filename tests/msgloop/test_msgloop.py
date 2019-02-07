@@ -8,7 +8,7 @@ def test_context_data_passed(in_out_args_mock, recv_multipart_mock, send_multipa
     def side_effect():
         yield good_msg
         yield good_msg
-        raise StopIteration()
+        yield StopIteration()
 
     recv_multipart_mock.side_effect = side_effect()
 
@@ -43,7 +43,7 @@ def test_regulraly_processed(in_out_args_mock, recv_multipart_mock, send_multipa
     def side_effect():
         yield good_msg
         yield good_msg
-        raise StopIteration()
+        yield StopIteration()
 
     recv_multipart_mock.side_effect = side_effect()
 
