@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name="sn",
-      version="0.2",
+      version="0.3.1",
       description="Sentinel networking library",
       author="CZ.NIC, z.s.p.o.",
       author_email="admin@turris.cz",
