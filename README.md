@@ -12,6 +12,7 @@ boxes:
 - Logging in standardized way (necessary to handle log messages by TM - Turris
   Monitoring)
 - Message queue for handling messages in safe and good-performing way
+- Boxes monitoring
 
 # Usage
 
@@ -172,6 +173,25 @@ Box should not use any other `self` data.
 ## Examples
 
 Basic examples are provided in `dev/` directory.
+
+## Monitoring
+
+Each SNBox has implemented internal monitoring. It sends standard SN messages in regular intervals to monitoring socket if resource
+called `mon` is defined. Otherwise it logs messages with `debug` severity through defined `self.logger`.
+
+Each 5 seconds messsage with topic `sentinel/monitoring/heartbeat` with payload `{'box': 'box_name', 'id': 'box_id', 'ts': 1655112907}` is sent.
+
+Each 10 seconds message with topic `sentinel/monitoring/stats` with payload `{'box': 'box_name', 'id': 'box_id', 'metrics': {'msg_recv': 12, 'msg_sent': 0}, 'ts': 1655112904}` is sent.
+
+Where:
+- `box` key contains name of the box passed to SNBox constructor
+- `id` key contains content of environment variable `SENTINEL_ID` or box name in case the environment variable is not set.
+- `ts` key contains time of message creation is seconds since epoch - Unix time
+- `metrics` key contains nested dict where:
+    - `msg_recv` key contains count of received messages since last monitoring message with topic `sentinel/monitoring/stats` was sent
+    - `msg_sent` key contains count of sent messages since last monitoring message with topic `sentinel/monitoring/stats` was sent
+
+For example of monitoring setup see `benchmark/` directory.
 
 ## Programmer documentation
 
