@@ -8,6 +8,11 @@ from .exceptions import SockConfigError, UndefinedSocketError
 
 
 class Resource:
+    """ Represents resource argument passed through CLI.
+        It is a placeholder for name, direction, socket type, IP address,
+        TCP port tuple. It does check for input values before creating a new
+        instance.
+    """
     NAME = re.compile("[a-z0-9_-]+")
     SIMPLE_ADDRESS = re.compile("[a-z0-9_-]+")
     DIRECTIONS = [
