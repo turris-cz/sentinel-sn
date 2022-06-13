@@ -1,26 +1,17 @@
 #!/usr/bin/env python3
 
 import time
-
-import zmq
-
 import sn
 
 
-def main():
-    ctx = sn.SN(zmq.Context.instance())
-    s = ctx.get_socket("feeder")
-
-    start = time.time()
-
-    for c in range(100000000000):
-        if (c % 10000) == 0:
-            print(c, time.time() - start)
-            start = time.time()
-
-        msg = sn.encode_msg("sentinel/bechmark", {"counter": c})
-        s.send_multipart(msg)
+class FeederBox(sn.SNGeneratorBox):
+    def process(self):
+        while True:
+            time.sleep(0.01)
+            t = time.time()
+            print(t)
+            yield "sentinel/bechmark", {"counter": t}
 
 
 if __name__ == "__main__":
-    main()
+    FeederBox("feeder_box").run()
