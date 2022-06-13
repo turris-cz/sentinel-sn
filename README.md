@@ -13,7 +13,7 @@ boxes:
   Monitoring)
 - Message queue for handling messages in safe and good-performing way
 
-## Usage
+# Usage
 
 There are 2 types of possible usage of this library:
 
@@ -21,9 +21,9 @@ There are 2 types of possible usage of this library:
 2. `SNBox` class and it's non-abstract implementations `SNGeneratorBox`,
    `SNPipelineBox`, `SNTerminationBox` and `SNMultipleOutputPipelineBox`
 
-### Which one is the best for me?
+## Which one is the best for me?
 
-#### SNBox
+### SNBox
 
 `SNBox` provides safe implementation for straightforward box behavior like
 `out-only`, `in-out` or `in-only` type of processing.
@@ -37,7 +37,7 @@ It aims to be a programmer-friendly and provides naive and straightforward API.
 
 Use `SNBox` for every box in pipeline.
 
-#### sn.SN
+### sn.SN
 
 On the other hand, `sn.SN` provides only the basic gateway for common
 configuration. All additional features are used independently.
@@ -46,14 +46,14 @@ Use `sn.SN` for every box that is part of Sentinel Network but has non-trivial
 requirements for communication pattern.
 
 
-#### Examples
+### Examples
 
 `SNBox` is used across all pipeline boxes and almost all boxes of DynFW.
 
 `sn.SN` is used for `smash` (2 event loops can't work together) or DynFW
 `publisher` (encryption at public socket).
 
-## SNBox
+# SNBox
 
 Every box is implemented as a class that inherits from one of these non-abstract
 `SNBox` implementations:
@@ -69,7 +69,7 @@ Every box is implemented as a class that inherits from one of these non-abstract
   is expected unlimited number of outgoing messages - e.g. DynFW
   `rules_collector`
 
-### Usage
+## Usage
 
 ```python
 class MyBox(SNPipelineBox):
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     MyBox("by_box_name").run()
 ```
 
-#### Setup
+### Setup
 
 Optional. Box could allocate here some resources that will be needed. All
 resources must be returned as a dictionary. Otherwise will be thrown
@@ -102,12 +102,12 @@ All resource initialized by `setup()` will be available in
 
 Box should not use `self` for its data.
 
-#### Teardown
+### Teardown
 
 Optional. Box is able to make safe cleanup in this function. All resources are
 available in `self.ctx.RESOURCE_NAME`.
 
-#### Process
+### Process
 
 Mandatory. Box obtains every message in 2 variables: `msg_type` (string with
 message type identification - see Sentinel documentation for details) and
@@ -117,7 +117,7 @@ message type identification - see Sentinel documentation for details) and
 - `None` - there is no reasonable answer for message
 - a `tuple` of `msg_type` and `payload` determines outgoing message
 
-#### Before first request
+### Before first request
 
 Optional. There is one more function:
 
@@ -135,18 +135,18 @@ case of `process()`.
 Currently, used only for DynFW `rules_collector`.
 
 
-#### Specialities
+## Specialities
 
-##### `SNGeneratorBox`
+### `SNGeneratorBox`
 
 `process` do not accept `msg_type` and `payload` and `process` must be a
 generator - uses `yield` keyword.
 
-##### `SNTerminationBox`
+### `SNTerminationBox`
 
 Non-`None` return value is treated as a error.
 
-##### `SNMultipleOutputPipelineBox`
+### `SNMultipleOutputPipelineBox`
 
 Return value is a `list` of tuples:
 
@@ -159,7 +159,7 @@ Return value is a `list` of tuples:
 
 The same behavior is expected in `before_first_request` function.
 
-#### Available resources
+## Available resources
 
 `self` provides some common resources for box:
 - `self.name` - name of the box provided to the constructor
@@ -169,11 +169,11 @@ The same behavior is expected in `before_first_request` function.
 
 Box should not use any other `self` data.
 
-#### Examples
+## Examples
 
 Basic examples are provided in `dev/` directory.
 
-#### Programmer documentation
+## Programmer documentation
 
 There is also available documentation more suitable for programmers of lower levels.
 
@@ -186,7 +186,7 @@ make html
 BROWSER _build/html/index.html
 ```
 
-## sn.SN
+# sn.SN
 
 ```python
 def main():
@@ -211,7 +211,7 @@ if __name__ == "__main__":
 This example says it all. Nothing more is provided.
 
 
-### `get_socket`
+## `get_socket`
 
 Socket (or resource in internal terminology) could be requested as:
 ```python
