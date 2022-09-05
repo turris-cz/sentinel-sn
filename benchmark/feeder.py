@@ -14,4 +14,4 @@ class FeederBox(sn.SNGeneratorBox):
 
 
 if __name__ == "__main__":
-    FeederBox("feeder_box").run()
+    FeederBox().run()

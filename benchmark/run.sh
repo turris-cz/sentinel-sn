@@ -25,17 +25,17 @@ tmux select-pane -t 0
 tmux send-keys "tail -f sentinel.log" C-m
 tmux select-pane -t 1
 tmux send-keys "workon sentinel" C-m
-tmux send-keys "./feeder.py --resource 'out,connect,PUSH,127.0.0.1,8801' --resource 'mon,connect,PUSH,127.0.0.1,8803' -v" C-m
+tmux send-keys "./feeder.py --name 'feeder' --resource 'out,connect,PUSH,127.0.0.1,8801' --resource 'mon,connect,PUSH,127.0.0.1,8803' -v" C-m
 tmux select-pane -t 2
 tmux send-keys "workon sentinel" C-m
-tmux send-keys "./drain.py --resource 'in,bind,PULL,*,8802' --resource 'mon,connect,PUSH,127.0.0.1,8803' -v" C-m
+tmux send-keys "./drain.py --name 'drain' --resource 'in,bind,PULL,*,8802' --resource 'mon,connect,PUSH,127.0.0.1,8803' -v" C-m
 tmux select-pane -t 3
 tmux send-keys "workon sentinel" C-m
-tmux send-keys "./box.py --resource 'in,bind,PULL,*,8801' --resource 'out,connect,PUSH,127.0.0.1,8802' --resource 'mon,connect,PUSH,127.0.0.1,8803' -v" C-m
+tmux send-keys "./box.py --name 'box' --resource 'in,bind,PULL,*,8801' --resource 'out,connect,PUSH,127.0.0.1,8802' --resource 'mon,connect,PUSH,127.0.0.1,8803' -v" C-m
 tmux select-pane -t 4
 tmux send-keys "workon sentinel" C-m
 # the box is monitoring itself
-tmux send-keys "./monitoring.py --resource 'in,bind,PULL,*,8803' --resource 'mon,connect,PUSH,127.0.0.1,8803' -v" C-m
+tmux send-keys "./monitoring.py --name 'monitoring' --resource 'in,bind,PULL,*,8803' --resource 'mon,connect,PUSH,127.0.0.1,8803' -v" C-m
 
 # Attach the session
 tmux attach-session -t "$SESSION"

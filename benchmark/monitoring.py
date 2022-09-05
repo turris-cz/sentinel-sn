@@ -9,4 +9,4 @@ class MonitorCollectorBox(sn.SNTerminationBox):
 
 
 if __name__ == "__main__":
-    MonitorCollectorBox("monitor_collector_box").run()
+    MonitorCollectorBox().run()

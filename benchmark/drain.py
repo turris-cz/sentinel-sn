@@ -9,5 +9,5 @@ class DrainBox(sn.SNTerminationBox):
 
 
 if __name__ == "__main__":
-    DrainBox("drain_box").run()
+    DrainBox().run()
 

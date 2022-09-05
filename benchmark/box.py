@@ -9,4 +9,4 @@ class MyBox(sn.SNPipelineBox):
 
 
 if __name__ == "__main__":
-    MyBox("benchmark_box").run()
+    MyBox().run()
