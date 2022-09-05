@@ -32,4 +32,4 @@ class MyBox(sn.SNGeneratorBox):
 
 
 if __name__ == "__main__":
-    MyBox("out_only").run()
+    MyBox().run()

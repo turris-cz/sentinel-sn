@@ -19,4 +19,4 @@ class MyBox(sn.SNPipelineBox):
 
 
 if __name__ == "__main__":
-    MyBox("in_out").run()
+    MyBox().run()

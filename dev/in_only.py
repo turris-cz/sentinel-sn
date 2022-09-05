@@ -17,4 +17,4 @@ class MyBox(sn.SNTerminationBox):
 
 
 if __name__ == "__main__":
-    MyBox("in_only").run()
+    MyBox().run()
