@@ -172,7 +172,7 @@ Box should not use any other `self` data.
 
 ## Examples
 
-Basic examples are provided in `dev/` directory.
+Basic examples are provided in `examples/` directory.
 
 ## Monitoring
 
