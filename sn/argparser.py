@@ -26,4 +26,9 @@ def get_arg_parser():
                         action=EnableVerbose,
                         help="Enables debug mode in logger"
                         )
+    parser.add_argument('-n', '--name',
+                    help="Name of the box",
+                    required=True,
+                    type=str,
+                    )
     return parser

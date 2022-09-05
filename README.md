@@ -89,7 +89,7 @@ class MyBox(SNPipelineBox):
             return msg_type, payload
 
 if __name__ == "__main__":
-    MyBox("by_box_name").run()
+    MyBox().run()
 ```
 
 ### Setup
@@ -163,7 +163,7 @@ The same behavior is expected in `before_first_request` function.
 ## Available resources
 
 `self` provides some common resources for box:
-- `self.name` - name of the box provided to the constructor
+- `self.name` - name of the box provided by CLI parameter
 - `self.logger` - initialized and configured logger
 - `self.args` - parsed command line arguments
 - `self.ctx` - user data from `setup()` function
@@ -309,7 +309,7 @@ ctx = sn.SN(zmq.Context.instance(), argparser=my_argparser())
 or
 
 ```python
-MyBox("by_box_name", argparser=my_argparser()).run()
+MyBox(argparser=my_argparser()).run()
 ```
 4. Get parsed arguments as:
 ```python

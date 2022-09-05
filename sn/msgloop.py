@@ -35,7 +35,7 @@ class SNBox():
     :param box_name: Unique identification of the box in Sentinel network.
     :param argparser: Enriched argparser - see :func:`sn.get_arg_parser`
     """
-    def __init__(self, box_name, argparser=None):
+    def __init__(self, argparser=None):
         """Initialize common Box resources.
 
         The most important resources:
@@ -50,9 +50,9 @@ class SNBox():
         self.zmq_ctx = zmq.Context.instance()
         self.sn_ctx = SN(self.zmq_ctx, argparser or get_arg_parser())
         # Important values provided to box
-        self.name = box_name
-        self.logger = logging.getLogger(box_name)
         self.args = self.sn_ctx.args
+        self.name = self.args.name
+        self.logger = logging.getLogger(self.name)
         # Error management of the loop
         self.loop_continue = True
         self.errors_in_row = 0
@@ -62,7 +62,7 @@ class SNBox():
         self.ctx = None
         # Monitoring
         self.socket_monitoring = self.get_socket("mon")
-        self.mon = Monitoring(box_name, self.socket_monitoring)
+        self.mon = Monitoring(self.name, self.socket_monitoring)
         self.received_messages = self.mon.get_counter("msg_recv")
         self.sent_messages = self.mon.get_counter("msg_sent")
 
@@ -254,9 +254,9 @@ class SNPipelineBox(SNBox):
     messages from *in* resource, it processes messages and sends the result to *out*
     resource.
     """
-    def __init__(self, box_name, argparser=None):
+    def __init__(self, argparser=None):
         """Initialize *in* and *out* resources."""
-        super().__init__(box_name, argparser)
+        super().__init__(argparser)
         self.socket_recv = self.get_socket("in")
         self.socket_send = self.get_socket("out")
 
@@ -314,9 +314,9 @@ class SNGeneratorBox(SNBox):
     because Python generators automatically raises ``StopIteration`` after
     uncatched exceptions.
     """
-    def __init__(self, box_name, argparser=None):
+    def __init__(self, argparser=None):
         """Initialize *out* resource."""
-        super().__init__(box_name, argparser)
+        super().__init__(argparser)
         self.socket_send = self.get_socket("out")
 
         if not inspect.isgeneratorfunction(self.process):
@@ -362,9 +362,9 @@ class SNTerminationBox(SNBox):
     It expects only *in* resource and raises :exc:`sn.SetupError` if
     :meth:`process` has any result.
     """
-    def __init__(self, box_name, argparser=None):
+    def __init__(self, argparser=None):
         """Initialize *in* resource."""
-        super().__init__(box_name, argparser)
+        super().__init__(argparser)
         self.socket_recv = self.get_socket("in")
 
     def check_configuration(self):
