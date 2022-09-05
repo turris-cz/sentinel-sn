@@ -15,7 +15,7 @@ def test_context_data_passed(in_out_args_mock, recv_multipart_mock, send_multipa
     class TestBox(sn.SNPipelineBox):
         pass
 
-    tb = TestBox("test")
+    tb = TestBox()
     tb.setup = mock_setup = Mock(return_value={"foo": "bar"})
     tb.teardown = mock_teardown = Mock()
     tb.process = mock_process = Mock(return_value=("sentinel/test", {"foo": "bar"}))
@@ -51,7 +51,7 @@ def test_regulraly_processed(in_out_args_mock, recv_multipart_mock, send_multipa
         def process(self, msg_type, payload):
             return "processed", payload
 
-    TestBox("test").run()
+    TestBox().run()
 
     assert send_multipart_mock.called
     assert send_multipart_mock.call_count == 2
@@ -66,7 +66,7 @@ def test_processed_from_generator(out_only_args_mock, send_multipart_mock):
             for i in range(msg_num):
                 yield "sentinel/test", {"foo": "bar"}
 
-    TestBox("test").run()
+    TestBox().run()
 
     assert send_multipart_mock.called
     assert send_multipart_mock.call_count == msg_num
@@ -79,7 +79,7 @@ def test_many_errors_in_row(out_only_args_mock, send_multipart_mock):
             while True:
                 yield "šentinel/test", {"foo": "bar"}
 
-    tb = TestBox("test")
+    tb = TestBox()
 
     with pytest.raises(SystemExit) as se:
         tb.run()
@@ -97,7 +97,7 @@ def test_resetable_error_counter(out_only_args_mock, send_multipart_mock):
                 yield "šentinel/test", {"foo": "bar"}
             yield "sentinel/test", {"foo": "bar"}
 
-    TestBox("test").run()
+    TestBox().run()
 
     assert send_multipart_mock.called
 
@@ -110,7 +110,7 @@ def test_before_first_request_processed(out_only_args_mock, send_multipart_mock)
         def process(self):
             yield "sentinel/test", {"foo": "bar"}
 
-    tb = TestBox("test")
+    tb = TestBox()
     tb.run()
 
     assert send_multipart_mock.called
@@ -126,7 +126,7 @@ def test_set_signal_handlers(out_only_args_mock, send_multipart_mock):
             yield "sentinel/test", {"foo": "bar"}
 
     with patch("signal.signal") as signal:
-        tb = TestBox("test")
+        tb = TestBox()
         tb.run()
 
         assert signal.called
@@ -143,7 +143,7 @@ def test_signal_handler_stops_loop(in_out_args_mock, recv_multipart_mock, send_m
         sh(None, None)
         return t, p
 
-    tb = TestBox("test")
+    tb = TestBox()
     tb.process = Mock(side_effect=se)
     tb.run()
 

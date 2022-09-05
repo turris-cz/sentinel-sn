@@ -4,7 +4,7 @@ import sn
 
 
 def test_send(zmq_context, socket_binded):
-    with patch("sys.argv", ["prog", "--resource", "res,connect,PUSH,127.0.0.1,8800"]):
+    with patch("sys.argv", ["prog", "--name", "test", "--resource", "res,connect,PUSH,127.0.0.1,8800"]):
         msg = b"ping"
         ctx = sn.SN(zmq_context)
         s = ctx.get_socket("res")
@@ -17,7 +17,7 @@ def test_send(zmq_context, socket_binded):
 
 
 def test_recv(zmq_context, socket_connected):
-    with patch("sys.argv", ["prog", "--resource", "res,bind,PULL,127.0.0.1,8800"]):
+    with patch("sys.argv", ["prog", "--name", "test", "--resource", "res,bind,PULL,127.0.0.1,8800"]):
         msg = b"ping"
         ctx = sn.SN(zmq_context)
         s = ctx.get_socket("res")

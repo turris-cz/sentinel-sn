@@ -21,22 +21,22 @@ def build_msg(msg_type, payload):
 
 @pytest.fixture
 def in_only_args():
-    return args_from_string("--resource in,bind,PULL,*,8801")
+    return args_from_string("--name test --resource in,bind,PULL,*,8801")
 
 
 @pytest.fixture
 def out_only_args():
-    return args_from_string("--resource out,connect,PUSH,127.0.0.1,8802")
+    return args_from_string("--name test --resource out,connect,PUSH,127.0.0.1,8802")
 
 
 @pytest.fixture
 def in_out_args():
-    return args_from_string("--resource in,connect,PULL,127.0.0.1,8801 --resource out,connect,PUSH,127.0.0.1,8802")
+    return args_from_string("--name test --resource in,connect,PULL,127.0.0.1,8801 --resource out,connect,PUSH,127.0.0.1,8802")
 
 
 @pytest.fixture
 def bad_socket_args():
-    return args_from_string("--resource bad_name,connect,PUSH,127.0.0.1,8802")
+    return args_from_string("--name test --resource bad_name,connect,PUSH,127.0.0.1,8802")
 
 
 @pytest.fixture
