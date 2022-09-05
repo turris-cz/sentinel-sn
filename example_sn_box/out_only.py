@@ -5,10 +5,10 @@ import time
 import sn
 
 
-class MyBox(sn.SNGeneratorBox):
+class OutOnlyBox(sn.SNGeneratorBox):
     def setup(self):
         return {
-                "foo": "bar",
+                "foo": "boor",
         }
 
     def teardown(self):
@@ -32,4 +32,4 @@ class MyBox(sn.SNGeneratorBox):
 
 
 if __name__ == "__main__":
-    MyBox().run()
+    OutOnlyBox().run()

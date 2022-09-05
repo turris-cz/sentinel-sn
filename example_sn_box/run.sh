@@ -23,13 +23,16 @@ tmux select-pane -t 0
 tmux send-keys "tail -f sentinel.log" C-m
 tmux select-pane -t 1
 tmux send-keys "workon sentinel" C-m
-tmux send-keys "./out_only.py --name 'out_only' --resource 'out,connect,PUSH,127.0.0.1,8801' -v" C-m
+tmux send-keys "./in_only.py --name 'in_only' --resource 'in,bind,PULL,*,8803' -v" C-m
 tmux select-pane -t 2
 tmux send-keys "workon sentinel" C-m
-tmux send-keys "./in_only.py --name 'in_only' --resource 'in,bind,PULL,*,8802' -v" C-m
+tmux send-keys "./in_multiple_out.py --name 'in_multiple_out' --resource 'in,bind,PULL,*,8802' --resource 'out,connect,PUSH,localhost,8803' -v" C-m
 tmux select-pane -t 3
 tmux send-keys "workon sentinel" C-m
-tmux send-keys "./in_out.py --name 'in_out' --resource 'in,bind,PULL,*,8801' --resource 'out,connect,PUSH,127.0.0.1,8802' -v" C-m
+tmux send-keys "./in_out.py --name 'in_out' --resource 'in,bind,PULL,*,8801' --resource 'out,connect,PUSH,localhost,8802' -v" C-m
+tmux select-pane -t 4
+tmux send-keys "workon sentinel" C-m
+tmux send-keys "./out_only.py --name 'out_only' --resource 'out,connect,PUSH,localhost,8801' -v" C-m
 
 # Attach the session
 tmux attach-session -t "$SESSION"

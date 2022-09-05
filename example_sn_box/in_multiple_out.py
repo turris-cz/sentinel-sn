@@ -3,7 +3,7 @@
 import sn
 
 
-class MyBox(sn.SNTerminationBox):
+class InMultipleOutBox(sn.SNMultipleOutputPipelineBox):
     def setup(self):
         return {
                 "foo": "bar",
@@ -15,6 +15,13 @@ class MyBox(sn.SNTerminationBox):
     def process(self, msg_type, payload):
         print(msg_type, payload)
 
+        payload2 = payload.copy()
+
+        payload.pop("fee")
+        payload2.pop("foo")
+
+        return [(msg_type + "/fee", payload2), (msg_type + "/foo", payload)]
+
 
 if __name__ == "__main__":
-    MyBox().run()
+    InMultipleOutBox().run()
