@@ -1,0 +1,15 @@
+## Cache files and folders
+__pycache__
+*.egg-info/
+dist/
+
+## Tests
+.pytest_cache
+.coverage
+
+## Logs
+*.log
+*.log.*
+
+## mypy
+.mypy_cache
