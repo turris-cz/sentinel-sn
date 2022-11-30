@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import sys
 import time
 from random import randint
 
@@ -12,7 +11,7 @@ import turris_sentinel_network
 aparser = turris_sentinel_network.get_arg_parser()
 
 ctx = zmq.Context.instance()
-sctx = turris_sentinel_network.SN(ctx, args)
+sctx = turris_sentinel_network.SN(ctx, aparser)
 args = sctx.args
 sock_cli, sock_cli2 = sctx.get_socket("sock_cli", ("sock_cli2", "REQ"))
 

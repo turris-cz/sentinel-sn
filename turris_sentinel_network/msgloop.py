@@ -169,7 +169,7 @@ class SNBox:
             self.before_loop()
             self.run_loop()
 
-        except LoopHardFail as e:
+        except LoopHardFail:
             self.logger.exception("Hard Fail of box: %s", self.name)
             # Finally will be called, because sys.exit() raises exception that will be uncaught.
             sys.exit(1)
@@ -227,7 +227,7 @@ class SNBox:
                 # It means programmer error ans there is no reason for trying to recover
                 raise e
 
-            except Exception as e:
+            except Exception:
                 self.logger.exception("Uncaught exception from loop")
 
                 self.errors_in_row += 1
@@ -240,7 +240,7 @@ class SNBox:
         try:
             socket = self.sn_ctx.get_socket(sock_name)
 
-        except UndefinedSocketError as e:
+        except UndefinedSocketError:
             pass
 
         return socket
