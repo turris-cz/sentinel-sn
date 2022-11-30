@@ -1,11 +1,7 @@
-## Files for packaging
-MANIFEST
-dist
-
 ## Cache files and folders
-*.pyc
 __pycache__
 *.egg-info/
+dist/
 
 ## Tests
 .pytest_cache
@@ -15,5 +11,5 @@ __pycache__
 *.log
 *.log.*
 
-## Docs
-docs/_build/
+## mypy
+.mypy_cache
