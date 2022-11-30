@@ -1,5 +1,4 @@
 import pytest
-
 import zmq
 
 # This test proof that SN class is really able to generate working sockets.

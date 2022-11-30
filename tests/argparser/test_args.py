@@ -1,5 +1,4 @@
 import pytest
-
 import zmq
 
 import turris_sentinel_network

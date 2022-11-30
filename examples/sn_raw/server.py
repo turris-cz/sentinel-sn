@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-import zmq
 import sys
 import time
 from random import randint
+
+import zmq
 
 import turris_sentinel_network
 

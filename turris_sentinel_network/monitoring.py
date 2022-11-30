@@ -1,10 +1,9 @@
+import logging
+import os
 import threading
 import time
-import os
-import logging
 
 from .messages import encode_msg
-
 
 RUN_EVERY = 10
 HB_RATE = 5

@@ -1,6 +1,5 @@
-import pytest
-
 import msgpack
+import pytest
 
 
 @pytest.fixture

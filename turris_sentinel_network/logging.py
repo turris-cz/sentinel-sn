@@ -29,9 +29,9 @@ Please, do not change logging format for syslog handler. It will be parsed by
 TM. File handler is prefixed by current time, for better debugging.
 
 """
-import sys
 import logging
 import logging.handlers
+import sys
 
 formatter = logging.Formatter(
     "sentinel: %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s", "%Y-%m-%d %H:%M:%S"

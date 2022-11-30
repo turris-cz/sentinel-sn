@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-import zmq
 import sys
-import turris_sentinel_network
 import time
-
 from random import randint
 
+import zmq
+
+import turris_sentinel_network
 
 ctx = zmq.Context.instance()
 sctx = turris_sentinel_network.SN(ctx)

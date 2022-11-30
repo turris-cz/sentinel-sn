@@ -1,8 +1,7 @@
-import pytest
-
 from unittest.mock import patch
 
 import msgpack
+import pytest
 
 
 def args_from_string(s):

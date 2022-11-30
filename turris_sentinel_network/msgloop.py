@@ -1,17 +1,15 @@
-import sys
-import logging
 import inspect
+import logging
 import signal
-
+import sys
 from types import SimpleNamespace
 
 import zmq
 
-from .network import SN
-from .network import get_arg_parser
+from .exceptions import InvalidMsgError, SetupError, UndefinedSocketError
 from .messages import encode_msg, parse_msg
-from .exceptions import SetupError, UndefinedSocketError, InvalidMsgError
 from .monitoring import Monitoring
+from .network import SN, get_arg_parser
 
 
 class LoopHardFail(Exception):

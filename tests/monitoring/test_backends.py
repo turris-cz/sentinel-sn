@@ -1,6 +1,6 @@
-import turris_sentinel_network
-
 from unittest.mock import Mock
+
+import turris_sentinel_network
 
 
 def test_sentinel_backend(monitoring_socket, send_multipart_mock):

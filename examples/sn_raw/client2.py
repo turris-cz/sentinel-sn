@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import sys
-import turris_sentinel_network
 import time
+from random import randint
+
 import zmq
 
-from random import randint
+import turris_sentinel_network
 
 # Custom argument parser is created here
 aparser = turris_sentinel_network.get_arg_parser()
