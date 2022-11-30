@@ -8,39 +8,43 @@ def good_type():
     return "sentinel/tests/good_string"
 
 
-@pytest.fixture(params=[
-                        "sentinel",
-                        "sentinel/tests",
-                        "sentinel/tests/goodstring",
-                        "sentinel/tests/good/string",
-                        "sentinel/tests/good_string",
-                        "sentinel/tests/good_string_123",
-                        "sentinel/tests/box1",
-                        "sentinel/tests/box/1",
-                        "s/t/b",
-                        "a/b/c/s/d/g",
-                        ])
+@pytest.fixture(
+    params=[
+        "sentinel",
+        "sentinel/tests",
+        "sentinel/tests/goodstring",
+        "sentinel/tests/good/string",
+        "sentinel/tests/good_string",
+        "sentinel/tests/good_string_123",
+        "sentinel/tests/box1",
+        "sentinel/tests/box/1",
+        "s/t/b",
+        "a/b/c/s/d/g",
+    ]
+)
 def good_types(request):
     return request.param
 
 
-@pytest.fixture(params=[
-                        "/sentinel/tests/broken",
-                        "sentinel/tests/broken/",
-                        "/sentinel/tests/broken/",
-                        "sentinel/tests/bro ken",
-                        "sentinel/tests/bro-ken",
-                        "sentinel/tests/Broken",
-                        "sentinel/tests/břoken",
-                        "sentinel/tests/bro?ken",
-                        "sentinel/tests/bro@ken",
-                        "sentinel//broken",
-                        "sentinel//broken",
-                        "s//b",
-                        "sentinel/",
-                        "/sentinel",
-                        ""
-                        ])
+@pytest.fixture(
+    params=[
+        "/sentinel/tests/broken",
+        "sentinel/tests/broken/",
+        "/sentinel/tests/broken/",
+        "sentinel/tests/bro ken",
+        "sentinel/tests/bro-ken",
+        "sentinel/tests/Broken",
+        "sentinel/tests/břoken",
+        "sentinel/tests/bro?ken",
+        "sentinel/tests/bro@ken",
+        "sentinel//broken",
+        "sentinel//broken",
+        "s//b",
+        "sentinel/",
+        "/sentinel",
+        "",
+    ]
+)
 def bad_types(request):
     return request.param
 

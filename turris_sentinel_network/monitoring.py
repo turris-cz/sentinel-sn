@@ -34,12 +34,8 @@ class MonitoringBase:
         self.metrics = {}
         self.lock = threading.Lock()
 
-        self.stats_thread = threading.Thread(target=self.stats_thread_worker,
-                                             daemon=True
-                                             )
-        self.hb_thread = threading.Thread(target=self.hb_thread_worker,
-                                          daemon=True
-                                          )
+        self.stats_thread = threading.Thread(target=self.stats_thread_worker, daemon=True)
+        self.hb_thread = threading.Thread(target=self.hb_thread_worker, daemon=True)
         self.stats_thread.start()
         self.hb_thread.start()
 

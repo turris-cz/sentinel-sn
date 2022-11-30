@@ -8,17 +8,15 @@ from .exceptions import SockConfigError, UndefinedSocketError
 
 
 class Resource:
-    """ Represents resource argument passed through CLI.
-        It is a placeholder for name, direction, socket type, IP address,
-        TCP port tuple. It does check for input values before creating a new
-        instance.
+    """Represents resource argument passed through CLI.
+    It is a placeholder for name, direction, socket type, IP address,
+    TCP port tuple. It does check for input values before creating a new
+    instance.
     """
+
     NAME = re.compile("[a-z0-9_-]+")
     SIMPLE_ADDRESS = re.compile("[a-z0-9_-]+")
-    DIRECTIONS = [
-        "connect",
-        "bind"
-    ]
+    DIRECTIONS = ["connect", "bind"]
     SOCK_TYPES = [
         "REQ",
         "REP",
@@ -96,11 +94,13 @@ class Resource:
         return cls(*splitted)
 
     def __eq__(self, other):
-        if self.name == other.name and \
-               self.direction == other.direction and \
-               self.sock_type == other.sock_type and \
-               self.address == other.address and \
-               self.port == other.port:
+        if (
+            self.name == other.name
+            and self.direction == other.direction
+            and self.sock_type == other.sock_type
+            and self.address == other.address
+            and self.port == other.port
+        ):
             return True
 
         return False
@@ -178,14 +178,15 @@ class Socket:
     def configure(self, socket):
         if "ipv6" in self.configuration:
             socket.ipv6 = self.configuration["ipv6"]
-        socket.setsockopt(zmq.LINGER, 1*1000)  # In msec
+        socket.setsockopt(zmq.LINGER, 1 * 1000)  # In msec
 
 
 class SN:
-    """ This class serves as a container for all resources. This class provides
+    """This class serves as a container for all resources. This class provides
     an API-like interface for requesting ZMQ sockets based on available
     resources.
     """
+
     def __init__(self, ctx, argparser=None):
         # Gather data
         self.context = ctx
@@ -218,7 +219,7 @@ class SN:
             self.sockets[resource.name].add_resource(resource)
 
     def get_socket(self, *requested_sockets):
-        """ Gets multiple socket names in 'get_socket(name1, name2,...)'
+        """Gets multiple socket names in 'get_socket(name1, name2,...)'
         or 'get_socket((name1, TYPE1), name2, (name3,TYPE3),...)' or any of
         their combinations. Returns list of all available ZMQ sockets with the
         required names. Exception is risen when there is no socket with the

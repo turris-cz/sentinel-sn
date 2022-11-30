@@ -10,4 +10,3 @@ class DrainBox(turris_sentinel_network.SNTerminationBox):
 
 if __name__ == "__main__":
     DrainBox().run()
-

@@ -8,7 +8,7 @@ import turris_sentinel_network
 class OutOnlyBox(turris_sentinel_network.SNGeneratorBox):
     def setup(self):
         return {
-                "foo": "boor",
+            "foo": "boor",
         }
 
     def teardown(self):

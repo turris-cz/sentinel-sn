@@ -22,7 +22,7 @@ class LoopFail(Exception):
     pass
 
 
-class SNBox():
+class SNBox:
     """SNBox is abstract box providing basic message loop functionality.
 
     This box provides interface for non-abstract and final-box classes.  It
@@ -35,6 +35,7 @@ class SNBox():
     :param box_name: Unique identification of the box in Sentinel network.
     :param argparser: Enriched argparser - see :func:`sn.get_arg_parser`
     """
+
     def __init__(self, argparser=None):
         """Initialize common Box resources.
 
@@ -254,6 +255,7 @@ class SNPipelineBox(SNBox):
     messages from *in* resource, it processes messages and sends the result to *out*
     resource.
     """
+
     def __init__(self, argparser=None):
         """Initialize *in* and *out* resources."""
         super().__init__(argparser)
@@ -314,6 +316,7 @@ class SNGeneratorBox(SNBox):
     because Python generators automatically raises ``StopIteration`` after
     uncatched exceptions.
     """
+
     def __init__(self, argparser=None):
         """Initialize *out* resource."""
         super().__init__(argparser)
@@ -362,6 +365,7 @@ class SNTerminationBox(SNBox):
     It expects only *in* resource and raises :exc:`sn.SetupError` if
     :meth:`process` has any result.
     """
+
     def __init__(self, argparser=None):
         """Initialize *in* resource."""
         super().__init__(argparser)
@@ -399,6 +403,7 @@ class SNMultipleOutputPipelineBox(SNPipelineBox):
     It's based on :class:`SNPipelineBox`. The only difference is that it expects
     not only one result but a ``list`` of results.
     """
+
     def process_result(self, result):
         """It checks if :meth:`process` has returned result, it iterates over result and
         calls :meth:`process_result` of ancestor for each sub-result.

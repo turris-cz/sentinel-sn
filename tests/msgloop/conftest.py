@@ -31,7 +31,9 @@ def out_only_args():
 
 @pytest.fixture
 def in_out_args():
-    return args_from_string("--name test --resource in,connect,PULL,127.0.0.1,8801 --resource out,connect,PUSH,127.0.0.1,8802")
+    return args_from_string(
+        "--name test --resource in,connect,PULL,127.0.0.1,8801 --resource out,connect,PUSH,127.0.0.1,8802"
+    )
 
 
 @pytest.fixture

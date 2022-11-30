@@ -9,7 +9,7 @@ SN_MSG = re.compile(SN_MSG_REGEXP)
 
 
 def parse_msg(data):
-    """ Gets a Sentinel-type ZMQ message and parses message type and its
+    """Gets a Sentinel-type ZMQ message and parses message type and its
     payload.
     """
     try:
@@ -28,7 +28,7 @@ def parse_msg(data):
 
 
 def encode_msg(msg_type, data):
-    """ Gets string message type and its's string data. Then, both of them are
+    """Gets string message type and its's string data. Then, both of them are
     packed to be prepared for zmg.send_multipart().
     """
 

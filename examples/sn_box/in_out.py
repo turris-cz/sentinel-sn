@@ -6,7 +6,7 @@ import turris_sentinel_network
 class InOutBox(turris_sentinel_network.SNPipelineBox):
     def setup(self):
         return {
-                "fee": "beer",
+            "fee": "beer",
         }
 
     def teardown(self):

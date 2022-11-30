@@ -139,6 +139,7 @@ def test_signal_handler_stops_loop(in_out_args_mock, recv_multipart_mock, send_m
     def se(t, p):
         # I will be happy for better solution...
         import signal
+
         sh = signal.getsignal(signal.SIGTERM)
         sh(None, None)
         return t, p
