@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import time
-import sn
+import turris_sentinel_network
 
 
-class FeederBox(sn.SNGeneratorBox):
+class FeederBox(turris_sentinel_network.SNGeneratorBox):
     def process(self):
         while True:
             time.sleep(0.01)

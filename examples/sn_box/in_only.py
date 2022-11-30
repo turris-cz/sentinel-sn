@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import sn
+import turris_sentinel_network
 
 
-class InOnlyBox(sn.SNTerminationBox):
+class InOnlyBox(turris_sentinel_network.SNTerminationBox):
     def setup(self):
         return {
                 "foo": "bar",

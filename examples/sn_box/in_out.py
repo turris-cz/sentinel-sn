@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import sn
+import turris_sentinel_network
 
 
-class InOutBox(sn.SNPipelineBox):
+class InOutBox(turris_sentinel_network.SNPipelineBox):
     def setup(self):
         return {
                 "fee": "beer",

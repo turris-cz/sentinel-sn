@@ -1,10 +1,10 @@
 import pytest
 
-import sn
+import turris_sentinel_network
 
 
 def test_managing_multiple_counters(monitoring_socket, send_multipart_mock):
-    m = sn.monitoring.Monitoring("test", monitoring_socket)
+    m = turris_sentinel_network.monitoring.Monitoring("test", monitoring_socket)
     c1 = m.get_counter("counter1")
     c2 = m.get_counter("counter2")
 
@@ -27,7 +27,7 @@ def test_managing_multiple_counters(monitoring_socket, send_multipart_mock):
 
 
 def test_unique_names(monitoring_socket, send_multipart_mock):
-    m = sn.monitoring.Monitoring("test", monitoring_socket)
+    m = turris_sentinel_network.monitoring.Monitoring("test", monitoring_socket)
     m.get_counter("counter")
     with pytest.raises(ValueError):
         m.get_counter("counter")

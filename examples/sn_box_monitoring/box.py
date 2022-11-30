@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import sn
+import turris_sentinel_network
 
 
-class MyBox(sn.SNPipelineBox):
+class MyBox(turris_sentinel_network.SNPipelineBox):
     def process(self, msg_type, payload):
         return msg_type, payload
 

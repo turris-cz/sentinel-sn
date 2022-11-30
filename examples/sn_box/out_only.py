@@ -2,10 +2,10 @@
 
 import time
 
-import sn
+import turris_sentinel_network
 
 
-class OutOnlyBox(sn.SNGeneratorBox):
+class OutOnlyBox(turris_sentinel_network.SNGeneratorBox):
     def setup(self):
         return {
                 "foo": "boor",

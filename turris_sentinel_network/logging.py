@@ -9,7 +9,7 @@ Expected usage in your script:
 
 ```
 import logging
-import sn
+import turris_sentinel_network
 logger = logging.getLogger("component_name")
 logger.info("I'm running!")
 ```
@@ -19,7 +19,7 @@ mechanism.  If you need to use DEBUG level, you must enable it explicitly:
 
 ```
 import logging
-import sn
+import turris_sentinel_network
 logger = logging.getLogger("component_name")
 logger.setLevel(logging.DEBUG)
 logger.debug("Still running...")

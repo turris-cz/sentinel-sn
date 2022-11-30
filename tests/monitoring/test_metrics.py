@@ -1,10 +1,10 @@
 import threading
 
-import sn
+import turris_sentinel_network
 
 
 def test_counter():
-    c = sn.monitoring.Counter("test", threading.Lock())
+    c = turris_sentinel_network.monitoring.Counter("test", threading.Lock())
     assert c.value == 0
 
     c.count()

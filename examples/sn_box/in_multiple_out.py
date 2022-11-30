@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import sn
+import turris_sentinel_network
 
 
-class InMultipleOutBox(sn.SNMultipleOutputPipelineBox):
+class InMultipleOutBox(turris_sentinel_network.SNMultipleOutputPipelineBox):
     def setup(self):
         return {
                 "foo": "bar",

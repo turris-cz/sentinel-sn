@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch
 
-import sn
+import turris_sentinel_network
 
 
 def test_context_data_passed(in_out_args_mock, recv_multipart_mock, send_multipart_mock, good_msg):
@@ -12,7 +12,7 @@ def test_context_data_passed(in_out_args_mock, recv_multipart_mock, send_multipa
 
     recv_multipart_mock.side_effect = side_effect()
 
-    class TestBox(sn.SNPipelineBox):
+    class TestBox(turris_sentinel_network.SNPipelineBox):
         pass
 
     tb = TestBox()
@@ -47,7 +47,7 @@ def test_regulraly_processed(in_out_args_mock, recv_multipart_mock, send_multipa
 
     recv_multipart_mock.side_effect = side_effect()
 
-    class TestBox(sn.SNPipelineBox):
+    class TestBox(turris_sentinel_network.SNPipelineBox):
         def process(self, msg_type, payload):
             return "processed", payload
 
@@ -61,7 +61,7 @@ def test_regulraly_processed(in_out_args_mock, recv_multipart_mock, send_multipa
 def test_processed_from_generator(out_only_args_mock, send_multipart_mock):
     msg_num = 5
 
-    class TestBox(sn.SNGeneratorBox):
+    class TestBox(turris_sentinel_network.SNGeneratorBox):
         def process(self):
             for i in range(msg_num):
                 yield "sentinel/test", {"foo": "bar"}
@@ -74,7 +74,7 @@ def test_processed_from_generator(out_only_args_mock, send_multipart_mock):
 
 
 def test_many_errors_in_row(out_only_args_mock, send_multipart_mock):
-    class TestBox(sn.SNGeneratorBox):
+    class TestBox(turris_sentinel_network.SNGeneratorBox):
         def process(self):
             while True:
                 yield "šentinel/test", {"foo": "bar"}
@@ -91,7 +91,7 @@ def test_many_errors_in_row(out_only_args_mock, send_multipart_mock):
 
 
 def test_resetable_error_counter(out_only_args_mock, send_multipart_mock):
-    class TestBox(sn.SNGeneratorBox):
+    class TestBox(turris_sentinel_network.SNGeneratorBox):
         def process(self):
             for i in range(10):
                 yield "šentinel/test", {"foo": "bar"}
@@ -103,7 +103,7 @@ def test_resetable_error_counter(out_only_args_mock, send_multipart_mock):
 
 
 def test_before_first_request_processed(out_only_args_mock, send_multipart_mock):
-    class TestBox(sn.SNGeneratorBox):
+    class TestBox(turris_sentinel_network.SNGeneratorBox):
         def before_first_request(self):
             return "sentinel/test/bfr", {"foo": "bar"}
 
@@ -121,7 +121,7 @@ def test_before_first_request_processed(out_only_args_mock, send_multipart_mock)
 
 
 def test_set_signal_handlers(out_only_args_mock, send_multipart_mock):
-    class TestBox(sn.SNGeneratorBox):
+    class TestBox(turris_sentinel_network.SNGeneratorBox):
         def process(self):
             yield "sentinel/test", {"foo": "bar"}
 
@@ -133,7 +133,7 @@ def test_set_signal_handlers(out_only_args_mock, send_multipart_mock):
 
 
 def test_signal_handler_stops_loop(in_out_args_mock, recv_multipart_mock, send_multipart_mock):
-    class TestBox(sn.SNPipelineBox):
+    class TestBox(turris_sentinel_network.SNPipelineBox):
         pass
 
     def se(t, p):
