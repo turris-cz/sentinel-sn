@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import turris_sentinel_network
+from turris_sentinel_network import SNPipelineBox
 
 
-class InOutBox(turris_sentinel_network.SNPipelineBox):
+class InOutBox(SNPipelineBox):
     def setup(self):
+        print("setup")
         return {
             "fee": "beer",
         }
@@ -13,10 +14,10 @@ class InOutBox(turris_sentinel_network.SNPipelineBox):
         print("teardown")
 
     def process(self, msg_type, payload):
+        print("process")
         payload["fee"] = self.ctx.fee
         print(msg_type, payload)
         return msg_type, payload
 
 
-if __name__ == "__main__":
-    InOutBox().run()
+InOutBox().run()

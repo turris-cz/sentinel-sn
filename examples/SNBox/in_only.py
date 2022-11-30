@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import turris_sentinel_network
+from turris_sentinel_network import SNTerminationBox
 
 
-class InOnlyBox(turris_sentinel_network.SNTerminationBox):
+class InOnlyBox(SNTerminationBox):
     def setup(self):
+        print("setup")
         return {
             "foo": "bar",
         }
@@ -13,8 +14,8 @@ class InOnlyBox(turris_sentinel_network.SNTerminationBox):
         print("teardown")
 
     def process(self, msg_type, payload):
+        print("process")
         print(msg_type, payload)
 
 
-if __name__ == "__main__":
-    InOnlyBox().run()
+InOnlyBox().run()

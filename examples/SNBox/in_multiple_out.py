@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import turris_sentinel_network
+from turris_sentinel_network import SNMultipleOutputPipelineBox
 
 
-class InMultipleOutBox(turris_sentinel_network.SNMultipleOutputPipelineBox):
+class InMultipleOutBox(SNMultipleOutputPipelineBox):
     def setup(self):
+        print("setup")
         return {
             "foo": "bar",
         }
@@ -13,6 +14,7 @@ class InMultipleOutBox(turris_sentinel_network.SNMultipleOutputPipelineBox):
         print("teardown")
 
     def process(self, msg_type, payload):
+        print("procces")
         print(msg_type, payload)
 
         payload2 = payload.copy()
@@ -23,5 +25,4 @@ class InMultipleOutBox(turris_sentinel_network.SNMultipleOutputPipelineBox):
         return [(msg_type + "/fee", payload2), (msg_type + "/foo", payload)]
 
 
-if __name__ == "__main__":
-    InMultipleOutBox().run()
+InMultipleOutBox().run()

@@ -2,11 +2,12 @@
 
 import time
 
-import turris_sentinel_network
+from turris_sentinel_network import SNGeneratorBox
 
 
-class OutOnlyBox(turris_sentinel_network.SNGeneratorBox):
+class OutOnlyBox(SNGeneratorBox):
     def setup(self):
+        print("setup")
         return {
             "foo": "boor",
         }
@@ -15,6 +16,7 @@ class OutOnlyBox(turris_sentinel_network.SNGeneratorBox):
         print("teardown")
 
     def process(self):
+        print("process")
         serial = 0
         while True:
             data = {
@@ -28,8 +30,7 @@ class OutOnlyBox(turris_sentinel_network.SNGeneratorBox):
             yield "sentinel/dev/sn", data
 
             print("PUB", data)
-            time.sleep(1)
+            time.sleep(2)
 
 
-if __name__ == "__main__":
-    OutOnlyBox().run()
+OutOnlyBox().run()
