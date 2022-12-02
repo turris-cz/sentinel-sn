@@ -2,17 +2,17 @@
 
 import time
 
-import turris_sentinel_network
+from turris_sentinel_network import SNGeneratorBox
 
 
-class FeederBox(turris_sentinel_network.SNGeneratorBox):
+class FeederBox(SNGeneratorBox):
     def process(self):
+        print("process")
         while True:
-            time.sleep(0.01)
+            time.sleep(2)
             t = time.time()
             print(t)
             yield "sentinel/bechmark", {"counter": t}
 
 
-if __name__ == "__main__":
-    FeederBox().run()
+FeederBox().run()

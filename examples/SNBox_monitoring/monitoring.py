@@ -3,10 +3,10 @@
 import turris_sentinel_network
 
 
-class DrainBox(turris_sentinel_network.SNTerminationBox):
+class MonitorCollectorBox(turris_sentinel_network.SNTerminationBox):
     def process(self, msg_type, payload):
+        print("process")
         print(msg_type, payload)
 
 
-if __name__ == "__main__":
-    DrainBox().run()
+MonitorCollectorBox().run()
