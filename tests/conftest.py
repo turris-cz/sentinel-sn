@@ -1,10 +1,6 @@
-import sys
-
 import pytest
 
 import zmq
-
-sys.path.append("..")
 
 
 @pytest.fixture
