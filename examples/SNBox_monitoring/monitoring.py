@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import turris_sentinel_network
+from turris_sentinel_network.msgloop import SNTerminationBox
 
 
-class MonitorCollectorBox(turris_sentinel_network.SNTerminationBox):
+class MonitorCollectorBox(SNTerminationBox):
     def process(self, msg_type, payload):
         print("process")
         print(msg_type, payload)

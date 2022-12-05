@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from turris_sentinel_network import SNMultipleOutputPipelineBox
+from turris_sentinel_network.msgloop import SNMultipleOutputPipelineBox
 
 
 class InMultipleOutBox(SNMultipleOutputPipelineBox):

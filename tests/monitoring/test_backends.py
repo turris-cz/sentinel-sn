@@ -1,10 +1,10 @@
 from unittest.mock import Mock
 
-import turris_sentinel_network
+from turris_sentinel_network.monitoring import Monitoring
 
 
 def test_sentinel_backend(monitoring_socket, send_multipart_mock):
-    b = turris_sentinel_network.monitoring.Monitoring("test", monitoring_socket)
+    b = Monitoring("test", monitoring_socket)
     b.message("test", {"some": "data"})
 
     assert send_multipart_mock.called
@@ -12,7 +12,7 @@ def test_sentinel_backend(monitoring_socket, send_multipart_mock):
 
 
 def test_log_backend():
-    b = turris_sentinel_network.monitoring.Monitoring("test")
+    b = Monitoring("test")
 
     # OK, This is stupid and ugly, but I need to test that the backend does something
     b.logger = Mock()

@@ -5,7 +5,8 @@ from random import randint
 
 import zmq
 
-from turris_sentinel_network import SN, encode_msg, parse_msg
+from turris_sentinel_network.messages import encode_msg, parse_msg
+from turris_sentinel_network.network import SN
 
 # Setup SN
 sctx = SN(zmq.Context.instance())

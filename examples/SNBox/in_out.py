@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from turris_sentinel_network import SNPipelineBox
+from turris_sentinel_network.msgloop import SNPipelineBox
 
 
 class InOutBox(SNPipelineBox):

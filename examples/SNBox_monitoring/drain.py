@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from turris_sentinel_network import SNTerminationBox
+from turris_sentinel_network.msgloop import SNTerminationBox
 
 
 class DrainBox(SNTerminationBox):

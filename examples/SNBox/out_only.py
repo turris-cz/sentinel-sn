@@ -2,7 +2,7 @@
 
 import time
 
-from turris_sentinel_network import SNGeneratorBox
+from turris_sentinel_network.msgloop import SNGeneratorBox
 
 
 class OutOnlyBox(SNGeneratorBox):
