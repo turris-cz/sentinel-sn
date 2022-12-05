@@ -2,9 +2,10 @@
 
 There are 2 types of possible usage of this library:
 
-1. `sn.SN` class - raw usage
-2. `SNBox` class and it's non-abstract implementations `SNGeneratorBox`,
-   `SNPipelineBox`, `SNTerminationBox` and `SNMultipleOutputPipelineBox`
+1. `turris_sentinel_network.network.SN` class - raw usage
+2. `turris_sentinel_network.msgloop.SNBox` class and it's non-abstract
+implementations `SNGeneratorBox`, `SNPipelineBox`, `SNTerminationBox`
+and `SNMultipleOutputPipelineBox`.
 
 ## Which one is the best for me?
 
@@ -22,12 +23,12 @@ It aims to be a programmer-friendly and provides naive and straightforward API.
 
 Use `SNBox` for every box in pipeline.
 
-### sn.SN
+### SN
 
-On the other hand, `sn.SN` provides only the basic gateway for common
+On the other hand, `SN` provides only the basic gateway for common
 configuration. All additional features are used independently.
 
-Use `sn.SN` for every box that is part of Sentinel Network but has non-trivial
+Use `SN` for every box that is part of Sentinel Network but has non-trivial
 requirements for communication pattern.
 
 
@@ -35,7 +36,7 @@ requirements for communication pattern.
 
 `SNBox` is used across all pipeline boxes and almost all boxes of DynFW.
 
-`sn.SN` is used for `smash` (2 event loops can't work together) or DynFW
+`SN` is used for `smash` (2 event loops can't work together) or DynFW
 `publisher` (encryption at public socket).
 
 # SNBox
@@ -57,6 +58,8 @@ Every box is implemented as a class that inherits from one of these non-abstract
 ## Usage
 
 ```python
+from turris_sentinel_network.msgloop import SNPipelineBox
+
 class MyBox(SNPipelineBox):
     def setup(self):
         return {
@@ -72,8 +75,7 @@ class MyBox(SNPipelineBox):
 
             return msg_type, payload
 
-if __name__ == "__main__":
-    MyBox().run()
+MyBox().run()
 ```
 
 ### Setup
@@ -154,10 +156,6 @@ The same behavior is expected in `before_first_request` function.
 
 Box should not use any other `self` data.
 
-## Examples
-
-Basic examples are provided in `examples/` directory.
-
 ## Monitoring
 
 Each SNBox has implemented internal monitoring. It sends standard SN messages in regular intervals to monitoring socket if resource
@@ -175,36 +173,31 @@ Where:
     - `msg_recv` key contains count of received messages since last monitoring message with topic `sentinel/monitoring/stats` was sent
     - `msg_sent` key contains count of sent messages since last monitoring message with topic `sentinel/monitoring/stats` was sent
 
-For example of monitoring setup see `benchmark/` directory.
+For example of monitoring setup see `examples/SNBox_monitoring` directory.
 
-## Programmer documentation
+## Examples
 
-There is also available documentation more suitable for programmers of lower levels.
+Basic examples are provided in `examples/` directory.
 
-It is available in `docs/` directory and could be generated with `sphinx` tool:
 
-```
-pip install .[docs]
-cd docs/
-make html
-BROWSER _build/html/index.html
-```
-
-# sn.SN
+# SN
 
 ```python
+from turris_snetinel_network.network import SN
+from turris_sentinel_network.messages import encode_msg, parse_msg
+
 def main():
-    ctx = sn.SN(zmq.Context.instance())
+    ctx = SN(zmq.Context.instance())
 
     socket_in, socket_out = ctx.get_socket("in", "out")
 
     while True:
         msg = socket_in.recv_multipart()
-        msg_type, payload = sn.parse_msg(msg)
+        msg_type, payload = parse_msg(msg)
 
         payload["new_data"] = add_some_interesting_field()
 
-        msg = sn.encode_msg(msg_type, payload)
+        msg = encode_msg(msg_type, payload)
         socket_out.send_multipart(msg)
 
 
@@ -243,11 +236,11 @@ There are 2 preconfigured handlers:
 - syslog - INFO and higher severity
 - file under rotation - DEBUG and higher severity
 
-Expected usage in `sn.SN` script:
+Expected usage in `SN` script:
 
 ```python
 import logging
-import sn
+import turris_sentinel_network
 logger = logging.getLogger("component_name")
 logger.info("I'm running!")
 ```
@@ -262,9 +255,9 @@ level for file handler.
 Please, do not change logging format for syslog handler. It will be parsed by
 TM. File handler is prefixed by current time, for better debugging.
 
-## Argument parser
+# Argument parser
 
-Some scripts may need additional arguments.
+Some scripts/boxes may need additional arguments.
 
 Use this approach:
 1. Get common SN argparser
@@ -272,22 +265,22 @@ Use this approach:
 
 ```python
 
-import sn
+from turris_sentinel_network.argparser import get_arg_parser
 
 def my_argparser():
-    parser = sn.get_arg_parser()
+    parser = get_arg_parser()
     parser.add_argument('--my-cool-feature',
                         action='store_true',
-                        help='Enable by cool feature'
+                        help='Enable my cool feature'
                        )
 
     return parser
-
 ```
-3. Add new enriched argparser to `sn.SN`/`SNBox`
+
+3. Add new enriched argparser to `SN`/`SNBox`
 
 ```python
-ctx = sn.SN(zmq.Context.instance(), argparser=my_argparser())
+ctx = SN(zmq.Context.instance(), argparser=my_argparser())
 ```
 
 or
@@ -295,7 +288,9 @@ or
 ```python
 MyBox(argparser=my_argparser()).run()
 ```
+
 4. Get parsed arguments as:
+
 ```python
 ctx.args.ARGUMENT_NAME
 ```
