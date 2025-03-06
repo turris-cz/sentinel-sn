@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "turris_sentinel_network"
-version = "1.0.0"
+version = "1.0.1"
 description = "Core Turris Sentinel server infrastructure library"
 authors = ["Turris Software <software@turris.cz>"]
 license = "GPL-3.0-or-later"
